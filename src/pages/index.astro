@@ -117,6 +117,62 @@ import StatCard from '../components/StatCard.astro';
     </div>
   </div>
 
+  <!-- System Info (Neutralino.computer + Neutralino.os) -->
+  <div class="mt-6 glass-frosted rounded-2xl p-6 animate-fade-in-up stagger-7">
+    <div class="flex items-center justify-between mb-4">
+      <h2 class="text-lg font-semibold text-[var(--color-text)]">System-Info</h2>
+      <span id="sys-mode" class="text-xs font-medium px-2.5 py-1 rounded-full bg-slate-100 text-slate-600">Browser-Modus</span>
+    </div>
+    <p class="text-xs text-[var(--color-text-secondary)] mb-4">
+      Live-Daten via <code class="bg-[var(--color-bg-secondary)] px-1.5 py-0.5 rounded">Neutralino.computer</code> und <code class="bg-[var(--color-bg-secondary)] px-1.5 py-0.5 rounded">Neutralino.os</code>
+    </p>
+    <div class="grid grid-cols-2 md:grid-cols-4 gap-4" id="sys-info">
+      <div class="bg-[var(--color-bg-secondary)] rounded-xl p-4">
+        <p class="text-xs text-[var(--color-text-secondary)] mb-1">Betriebssystem</p>
+        <p class="text-sm font-semibold text-[var(--color-text)]" id="sys-os">--</p>
+      </div>
+      <div class="bg-[var(--color-bg-secondary)] rounded-xl p-4">
+        <p class="text-xs text-[var(--color-text-secondary)] mb-1">Kernel</p>
+        <p class="text-sm font-semibold text-[var(--color-text)]" id="sys-kernel">--</p>
+      </div>
+      <div class="bg-[var(--color-bg-secondary)] rounded-xl p-4">
+        <p class="text-xs text-[var(--color-text-secondary)] mb-1">RAM (gesamt)</p>
+        <p class="text-sm font-semibold text-[var(--color-text)]" id="sys-ram">--</p>
+      </div>
+      <div class="bg-[var(--color-bg-secondary)] rounded-xl p-4">
+        <p class="text-xs text-[var(--color-text-secondary)] mb-1">Hostname</p>
+        <p class="text-sm font-semibold text-[var(--color-text)]" id="sys-hostname">--</p>
+      </div>
+    </div>
+  </div>
+
+  <script is:inline>
+    async function loadSystemInfo() {
+      if (typeof Neutralino === 'undefined') return;
+      try {
+        const [mem, env] = await Promise.all([
+          Neutralino.computer.getMemoryInfo(),
+          Neutralino.os.getEnv('USER').catch(() => '--'),
+        ]);
+        const kv = NL_OS;
+
+        document.getElementById('sys-os').textContent = NL_OS || '--';
+        document.getElementById('sys-kernel').textContent = NL_VERSION || '--';
+        document.getElementById('sys-ram').textContent = Math.round(mem.physical.total / (1024 * 1024)) + ' MB';
+        document.getElementById('sys-hostname').textContent = await Neutralino.os.getEnv('HOSTNAME').catch(() => navigator.userAgent.split(' ')[0]);
+
+        const badge = document.getElementById('sys-mode');
+        badge.textContent = 'Native Modus';
+        badge.className = badge.className.replace('bg-slate-100 text-slate-600', 'bg-emerald-100 text-emerald-700');
+      } catch (e) {
+        console.warn('System info not available:', e);
+      }
+    }
+
+    if (window.__NL_READY) loadSystemInfo();
+    else window.addEventListener('neutralino-ready', loadSystemInfo);
+  </script>
+
   <!-- Recent Projects -->
   <div class="mt-6 glass-frosted rounded-2xl p-6 animate-fade-in-up stagger-7">
     <div class="flex items-center justify-between mb-6">

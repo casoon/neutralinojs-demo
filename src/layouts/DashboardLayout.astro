@@ -34,5 +34,22 @@ const currentPath = Astro.url.pathname;
       <slot />
     </main>
   </div>
+
+  <script is:inline src="/neutralino.js"></script>
+  <script is:inline>
+    document.addEventListener('DOMContentLoaded', async () => {
+      if (typeof Neutralino !== 'undefined') {
+        try {
+          await Neutralino.init();
+          window.__NL_READY = true;
+          window.dispatchEvent(new Event('neutralino-ready'));
+        } catch (e) {
+          console.warn('Neutralino init failed:', e);
+        }
+      } else {
+        console.info('Running in browser mode (Neutralino not available)');
+      }
+    });
+  </script>
 </body>
 </html>

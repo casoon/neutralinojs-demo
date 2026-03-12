@@ -1,5 +1,7 @@
 node_modules/
 dist/
+bin/
+.tmp/
 resources/
 .astro/
 .DS_Store

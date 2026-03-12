@@ -8,7 +8,7 @@
     "build": "astro build",
     "preview": "astro preview",
     "neu:dev": "neu run",
-    "neu:build": "astro build && cp -r dist/* resources/ && neu build"
+    "neu:build": "astro build && neu build"
   },
   "dependencies": {
     "astro": "^5.7.0",

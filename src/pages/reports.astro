@@ -18,7 +18,7 @@ const metrics = [
 ];
 ---
 
-<DashboardLayout title="Berichte" subtitle="Analyse und Reporting">
+<DashboardLayout title="Berichte" subtitle="Export &mdash; Neutralino.os + filesystem API">
   <!-- Quick Metrics -->
   <div class="grid grid-cols-1 md:grid-cols-4 gap-4 mb-6">
     {metrics.map((m, i) => (
@@ -37,10 +37,7 @@ const metrics = [
     <div class="lg:col-span-2 glass-frosted rounded-2xl p-6 animate-fade-in-up stagger-5">
       <div class="flex items-center justify-between mb-6">
         <h2 class="text-lg font-semibold text-[var(--color-text)]">Aktuelle Berichte</h2>
-        <button class="flex items-center gap-2 px-4 py-2 bg-[var(--color-accent)] text-white text-sm font-medium rounded-lg hover:bg-[var(--color-accent-hover)] transition-colors">
-          <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
-          Neuer Bericht
-        </button>
+        <span id="export-badge" class="text-xs font-medium px-2.5 py-1 rounded-full bg-slate-100 text-slate-600">Browser-Modus</span>
       </div>
       <div class="space-y-3">
         {reports.map((report) => (
@@ -53,7 +50,7 @@ const metrics = [
               <p class="text-xs text-[var(--color-text-secondary)] mt-0.5">{report.type} &middot; {report.date}</p>
             </div>
             <span class="text-xs text-[var(--color-text-secondary)]">{report.size}</span>
-            <button class="opacity-0 group-hover:opacity-100 p-2 rounded-lg hover:bg-[var(--color-bg-secondary)] transition-all">
+            <button class="opacity-0 group-hover:opacity-100 p-2 rounded-lg hover:bg-[var(--color-bg-secondary)] transition-all btn-download" data-title={report.title} data-type={report.type}>
               <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
             </button>
           </div>
@@ -61,40 +58,226 @@ const metrics = [
       </div>
     </div>
 
-    <!-- Generate Report -->
-    <div class="glass-frosted rounded-2xl p-6 animate-fade-in-up stagger-6">
-      <h2 class="text-lg font-semibold text-[var(--color-text)] mb-4">Bericht generieren</h2>
-      <div class="space-y-4">
-        <div>
-          <label class="block text-sm font-medium text-[var(--color-text)] mb-1.5">Berichtstyp</label>
-          <select class="w-full px-3 py-2.5 bg-[var(--color-bg-secondary)] border border-[var(--color-border)] rounded-lg text-sm">
-            <option>Monatsbericht</option>
-            <option>Sprint Report</option>
-            <option>Performance Audit</option>
-            <option>Kundenzufriedenheit</option>
-          </select>
-        </div>
-        <div>
-          <label class="block text-sm font-medium text-[var(--color-text)] mb-1.5">Zeitraum</label>
-          <select class="w-full px-3 py-2.5 bg-[var(--color-bg-secondary)] border border-[var(--color-border)] rounded-lg text-sm">
-            <option>Letzte 7 Tage</option>
-            <option>Letzte 30 Tage</option>
-            <option>Letztes Quartal</option>
-            <option>Benutzerdefiniert</option>
-          </select>
-        </div>
-        <div>
-          <label class="block text-sm font-medium text-[var(--color-text)] mb-1.5">Format</label>
-          <div class="flex gap-2">
-            <button class="flex-1 px-3 py-2 text-xs font-medium rounded-lg bg-[var(--color-accent)] text-white">PDF</button>
-            <button class="flex-1 px-3 py-2 text-xs font-medium rounded-lg bg-[var(--color-bg-secondary)] text-[var(--color-text-secondary)] hover:bg-[var(--color-border)] transition-colors">XLSX</button>
-            <button class="flex-1 px-3 py-2 text-xs font-medium rounded-lg bg-[var(--color-bg-secondary)] text-[var(--color-text-secondary)] hover:bg-[var(--color-border)] transition-colors">CSV</button>
+    <!-- Generate & Export Report -->
+    <div class="space-y-6">
+      <div class="glass-frosted rounded-2xl p-6 animate-fade-in-up stagger-6">
+        <h2 class="text-lg font-semibold text-[var(--color-text)] mb-4">Bericht generieren</h2>
+        <div class="space-y-4">
+          <div>
+            <label class="block text-sm font-medium text-[var(--color-text)] mb-1.5">Berichtstyp</label>
+            <select id="report-type" class="w-full px-3 py-2.5 bg-[var(--color-bg-secondary)] border border-[var(--color-border)] rounded-lg text-sm">
+              <option>Monatsbericht</option>
+              <option>Sprint Report</option>
+              <option>Performance Audit</option>
+              <option>Kundenzufriedenheit</option>
+            </select>
           </div>
+          <div>
+            <label class="block text-sm font-medium text-[var(--color-text)] mb-1.5">Zeitraum</label>
+            <select id="report-period" class="w-full px-3 py-2.5 bg-[var(--color-bg-secondary)] border border-[var(--color-border)] rounded-lg text-sm">
+              <option>Letzte 7 Tage</option>
+              <option>Letzte 30 Tage</option>
+              <option>Letztes Quartal</option>
+            </select>
+          </div>
+          <div>
+            <label class="block text-sm font-medium text-[var(--color-text)] mb-1.5">Format</label>
+            <div class="flex gap-2" id="format-buttons">
+              <button data-format="json" class="flex-1 px-3 py-2 text-xs font-medium rounded-lg bg-[var(--color-accent)] text-white">JSON</button>
+              <button data-format="csv" class="flex-1 px-3 py-2 text-xs font-medium rounded-lg bg-[var(--color-bg-secondary)] text-[var(--color-text-secondary)] hover:bg-[var(--color-border)] transition-colors">CSV</button>
+              <button data-format="txt" class="flex-1 px-3 py-2 text-xs font-medium rounded-lg bg-[var(--color-bg-secondary)] text-[var(--color-text-secondary)] hover:bg-[var(--color-border)] transition-colors">TXT</button>
+            </div>
+          </div>
+          <button id="btn-export" class="w-full py-2.5 bg-[var(--color-accent)] text-white text-sm font-medium rounded-lg hover:bg-[var(--color-accent-hover)] transition-colors mt-2">
+            Exportieren & Speichern
+          </button>
         </div>
-        <button class="w-full py-2.5 bg-[var(--color-accent)] text-white text-sm font-medium rounded-lg hover:bg-[var(--color-accent-hover)] transition-colors mt-2">
-          Bericht erstellen
+        <p class="text-xs text-[var(--color-text-secondary)] mt-3">
+          Export via <code class="bg-[var(--color-bg-secondary)] px-1.5 py-0.5 rounded">Neutralino.os.showSaveDialog()</code> und <code class="bg-[var(--color-bg-secondary)] px-1.5 py-0.5 rounded">filesystem.writeFile()</code>
+        </p>
+      </div>
+
+      <!-- Clipboard -->
+      <div class="glass-frosted rounded-2xl p-6 animate-fade-in-up stagger-7">
+        <h2 class="text-lg font-semibold text-[var(--color-text)] mb-4">Clipboard</h2>
+        <p class="text-sm text-[var(--color-text-secondary)] mb-4">Kopiere die aktuelle Report-Übersicht als Text in die Zwischenablage.</p>
+        <button id="btn-clipboard" class="w-full py-2.5 bg-[var(--color-bg-secondary)] text-[var(--color-text)] text-sm font-medium rounded-lg hover:bg-[var(--color-border)] transition-colors">
+          In Zwischenablage kopieren
         </button>
+        <p class="text-xs text-[var(--color-text-secondary)] mt-3">
+          Via <code class="bg-[var(--color-bg-secondary)] px-1.5 py-0.5 rounded">Neutralino.clipboard.writeText()</code>
+        </p>
+        <p id="clipboard-status" class="text-xs text-[var(--color-success)] mt-2 hidden">Kopiert!</p>
       </div>
     </div>
   </div>
+
+  <!-- Export Log -->
+  <div id="export-log" class="hidden mt-6 glass-frosted rounded-2xl p-6 animate-fade-in-up">
+    <h3 class="font-semibold text-[var(--color-text)] mb-2">Letzter Export</h3>
+    <pre id="export-preview" class="bg-[var(--color-bg-secondary)] rounded-lg p-4 text-xs text-[var(--color-text)] overflow-x-auto max-h-48"></pre>
+    <p id="export-path" class="text-xs text-[var(--color-text-secondary)] mt-2"></p>
+  </div>
+
+  <script is:inline>
+    let selectedFormat = 'json';
+
+    // Format buttons
+    document.querySelectorAll('#format-buttons button').forEach(btn => {
+      btn.addEventListener('click', () => {
+        selectedFormat = btn.dataset.format;
+        document.querySelectorAll('#format-buttons button').forEach(b => {
+          const isActive = b.dataset.format === selectedFormat;
+          b.className = `flex-1 px-3 py-2 text-xs font-medium rounded-lg ${isActive ? 'bg-[var(--color-accent)] text-white' : 'bg-[var(--color-bg-secondary)] text-[var(--color-text-secondary)] hover:bg-[var(--color-border)] transition-colors'}`;
+        });
+      });
+    });
+
+    function generateReport() {
+      const type = document.getElementById('report-type').value;
+      const period = document.getElementById('report-period').value;
+      const data = {
+        report: type,
+        period: period,
+        generated: new Date().toISOString(),
+        metrics: {
+          revenue: 48560,
+          users: 2340,
+          projects: 18,
+          tasks: { total: 142, open: 23, inProgress: 45, done: 74 },
+        },
+        topProjects: [
+          { name: 'Website Redesign', progress: 72 },
+          { name: 'Mobile App v2', progress: 45 },
+          { name: 'API Integration', progress: 89 },
+        ],
+      };
+
+      if (selectedFormat === 'json') return JSON.stringify(data, null, 2);
+      if (selectedFormat === 'csv') {
+        return [
+          'Metrik,Wert',
+          `Umsatz,${data.metrics.revenue}`,
+          `Benutzer,${data.metrics.users}`,
+          `Projekte,${data.metrics.projects}`,
+          `Aufgaben (gesamt),${data.metrics.tasks.total}`,
+          `Aufgaben (offen),${data.metrics.tasks.open}`,
+          '', 'Projekt,Fortschritt',
+          ...data.topProjects.map(p => `${p.name},${p.progress}%`),
+        ].join('\n');
+      }
+      // txt
+      return [
+        `=== ${type} ===`,
+        `Zeitraum: ${period}`,
+        `Erstellt: ${data.generated}`,
+        '',
+        'Kennzahlen:',
+        `  Umsatz:    €${data.metrics.revenue.toLocaleString('de')}`,
+        `  Benutzer:  ${data.metrics.users.toLocaleString('de')}`,
+        `  Projekte:  ${data.metrics.projects}`,
+        `  Aufgaben:  ${data.metrics.tasks.total} (${data.metrics.tasks.open} offen)`,
+        '',
+        'Top-Projekte:',
+        ...data.topProjects.map(p => `  - ${p.name}: ${p.progress}%`),
+      ].join('\n');
+    }
+
+    // Export with Save Dialog
+    document.getElementById('btn-export').addEventListener('click', async () => {
+      const content = generateReport();
+
+      if (typeof Neutralino === 'undefined') {
+        showPreview(content, 'Nur im Native-Modus verfügbar');
+        return;
+      }
+
+      try {
+        const ext = selectedFormat;
+        const result = await Neutralino.os.showSaveDialog('Bericht exportieren', {
+          filters: [
+            { name: ext.toUpperCase() + ' Dateien', extensions: [ext] },
+            { name: 'Alle Dateien', extensions: ['*'] },
+          ],
+          defaultPath: `report_${Date.now()}.${ext}`,
+        });
+
+        if (result) {
+          await Neutralino.filesystem.writeFile(result, content);
+          showPreview(content, 'Gespeichert: ' + result);
+          await Neutralino.os.showNotification('Export', 'Bericht wurde gespeichert.').catch(() => {});
+        }
+      } catch (e) {
+        console.warn('Export failed:', e);
+        showPreview(content, 'Export fehlgeschlagen: ' + e.message);
+      }
+    });
+
+    // Single report download
+    document.querySelectorAll('.btn-download').forEach(btn => {
+      btn.addEventListener('click', async (e) => {
+        e.stopPropagation();
+        if (typeof Neutralino === 'undefined') return;
+        const title = btn.dataset.title;
+        const data = JSON.stringify({ report: title, exported: new Date().toISOString(), data: '...' }, null, 2);
+
+        try {
+          const result = await Neutralino.os.showSaveDialog('Bericht speichern', {
+            filters: [{ name: 'JSON', extensions: ['json'] }],
+            defaultPath: title.replace(/\s+/g, '_').toLowerCase() + '.json',
+          });
+          if (result) {
+            await Neutralino.filesystem.writeFile(result, data);
+            await Neutralino.os.showNotification('Export', title + ' wurde gespeichert.').catch(() => {});
+          }
+        } catch (e) {
+          console.warn('Download failed:', e);
+        }
+      });
+    });
+
+    // Clipboard
+    document.getElementById('btn-clipboard').addEventListener('click', async () => {
+      const summary = generateReport();
+
+      if (typeof Neutralino !== 'undefined') {
+        try {
+          await Neutralino.clipboard.writeText(summary);
+          showClipboardStatus();
+          return;
+        } catch (e) { /* fallback */ }
+      }
+
+      // Browser fallback
+      try {
+        await navigator.clipboard.writeText(summary);
+        showClipboardStatus();
+      } catch (e) {
+        console.warn('Clipboard failed:', e);
+      }
+    });
+
+    function showClipboardStatus() {
+      const el = document.getElementById('clipboard-status');
+      el.classList.remove('hidden');
+      setTimeout(() => el.classList.add('hidden'), 2000);
+    }
+
+    function showPreview(content, path) {
+      document.getElementById('export-log').classList.remove('hidden');
+      document.getElementById('export-preview').textContent = content;
+      document.getElementById('export-path').textContent = path;
+    }
+
+    // Badge
+    function initExportBadge() {
+      if (typeof Neutralino === 'undefined') return;
+      const badge = document.getElementById('export-badge');
+      badge.textContent = 'Native Export';
+      badge.className = badge.className.replace('bg-slate-100 text-slate-600', 'bg-emerald-100 text-emerald-700');
+    }
+
+    if (window.__NL_READY) initExportBadge();
+    else window.addEventListener('neutralino-ready', initExportBadge);
+  </script>
 </DashboardLayout>

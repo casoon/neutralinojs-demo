@@ -1,76 +1,281 @@
 ---
 import DashboardLayout from '../layouts/DashboardLayout.astro';
-
-const projects = [
-  { name: 'Website Redesign', desc: 'Komplette Neugestaltung der Unternehmenswebsite', status: 'Aktiv', progress: 72, team: ['MK', 'TW', 'LB', 'PH'], deadline: '15. Apr. 2026', color: 'from-blue-500 to-cyan-400' },
-  { name: 'Mobile App v2', desc: 'Native App mit Flutter für iOS und Android', status: 'In Arbeit', progress: 45, team: ['SK', 'MK', 'TW', 'LB', 'PH', 'AH'], deadline: '30. Mai 2026', color: 'from-violet-500 to-purple-400' },
-  { name: 'API Integration', desc: 'REST API für Partner-Integrationen', status: 'Review', progress: 89, team: ['TW', 'PH', 'AH'], deadline: '20. Mär. 2026', color: 'from-emerald-500 to-teal-400' },
-  { name: 'Dashboard Analytics', desc: 'Erweiterte Analytics und Reporting Features', status: 'Planung', progress: 15, team: ['LB', 'SK'], deadline: '10. Jun. 2026', color: 'from-amber-500 to-orange-400' },
-  { name: 'Cloud Migration', desc: 'Migration der Infrastruktur zu AWS', status: 'Aktiv', progress: 60, team: ['PH', 'AH', 'TW'], deadline: '01. Mai 2026', color: 'from-rose-500 to-pink-400' },
-  { name: 'Design System', desc: 'Einheitliches Design System mit Webspire', status: 'Aktiv', progress: 85, team: ['MK', 'LB'], deadline: '25. Mär. 2026', color: 'from-indigo-500 to-blue-400' },
-];
-
-const statusColors: Record<string, string> = {
-  'Aktiv': 'bg-emerald-100 text-emerald-700',
-  'In Arbeit': 'bg-blue-100 text-blue-700',
-  'Review': 'bg-amber-100 text-amber-700',
-  'Planung': 'bg-slate-100 text-slate-600',
-};
 ---
 
-<DashboardLayout title="Projekte" subtitle="6 Projekte, 3 aktiv">
+<DashboardLayout title="Projekte" subtitle="Strukturierte JSON-Daten &mdash; Neutralino.filesystem API">
   <div class="flex items-center justify-between mb-6">
-    <div class="flex gap-2">
-      <button class="px-4 py-2 text-sm font-medium rounded-lg bg-[var(--color-accent)] text-white">Alle</button>
-      <button class="px-4 py-2 text-sm font-medium rounded-lg text-[var(--color-text-secondary)] hover:bg-[var(--color-bg-secondary)] transition-colors">Aktiv</button>
-      <button class="px-4 py-2 text-sm font-medium rounded-lg text-[var(--color-text-secondary)] hover:bg-[var(--color-bg-secondary)] transition-colors">Abgeschlossen</button>
+    <div class="flex items-center gap-4">
+      <div class="flex gap-2">
+        <button class="px-4 py-2 text-sm font-medium rounded-lg bg-[var(--color-accent)] text-white">Alle</button>
+        <button class="px-4 py-2 text-sm font-medium rounded-lg text-[var(--color-text-secondary)] hover:bg-[var(--color-bg-secondary)] transition-colors">Aktiv</button>
+        <button class="px-4 py-2 text-sm font-medium rounded-lg text-[var(--color-text-secondary)] hover:bg-[var(--color-bg-secondary)] transition-colors">Abgeschlossen</button>
+      </div>
+      <span id="fs-badge" class="text-xs font-medium px-2.5 py-1 rounded-full bg-slate-100 text-slate-600">Statische Daten</span>
     </div>
-    <button class="flex items-center gap-2 px-4 py-2 bg-[var(--color-accent)] text-white text-sm font-medium rounded-lg hover:bg-[var(--color-accent-hover)] transition-colors">
+    <button id="btn-add-project" class="flex items-center gap-2 px-4 py-2 bg-[var(--color-accent)] text-white text-sm font-medium rounded-lg hover:bg-[var(--color-accent-hover)] transition-colors">
       <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
       Neues Projekt
     </button>
   </div>
 
-  <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-    {projects.map((project, i) => (
-      <div class={`glass-frosted rounded-2xl overflow-hidden hover-lift animate-fade-in-up stagger-${i + 1}`}>
-        <div class={`h-2 bg-gradient-to-r ${project.color}`}></div>
-        <div class="p-6">
-          <div class="flex items-start justify-between mb-3">
-            <h3 class="font-semibold text-[var(--color-text)]">{project.name}</h3>
-            <span class={`inline-flex px-2.5 py-1 rounded-full text-xs font-medium ${statusColors[project.status]}`}>
-              {project.status}
-            </span>
-          </div>
-          <p class="text-sm text-[var(--color-text-secondary)] mb-4">{project.desc}</p>
-
-          <div class="mb-4">
-            <div class="flex justify-between text-xs mb-1.5">
-              <span class="text-[var(--color-text-secondary)]">Fortschritt</span>
-              <span class="font-medium text-[var(--color-text)]">{project.progress}%</span>
-            </div>
-            <div class="h-2 bg-[var(--color-bg-secondary)] rounded-full overflow-hidden">
-              <div class={`h-full rounded-full bg-gradient-to-r ${project.color}`} style={`width: ${project.progress}%`}></div>
-            </div>
-          </div>
-
-          <div class="flex items-center justify-between">
-            <div class="flex -space-x-2">
-              {project.team.slice(0, 4).map((member) => (
-                <div class="w-7 h-7 rounded-full border-2 border-white bg-gradient-to-br from-[var(--color-accent)] to-[var(--color-info)] flex items-center justify-center text-white text-[10px] font-bold">
-                  {member}
-                </div>
-              ))}
-              {project.team.length > 4 && (
-                <div class="w-7 h-7 rounded-full border-2 border-white bg-[var(--color-bg-secondary)] flex items-center justify-center text-[10px] font-medium text-[var(--color-text-secondary)]">
-                  +{project.team.length - 4}
-                </div>
-              )}
-            </div>
-            <span class="text-xs text-[var(--color-text-secondary)]">{project.deadline}</span>
-          </div>
-        </div>
+  <!-- Add Project Dialog -->
+  <div id="add-project-dialog" class="hidden mb-6 glass-frosted rounded-2xl p-6 animate-fade-in-up">
+    <h3 class="font-semibold text-[var(--color-text)] mb-4">Neues Projekt anlegen</h3>
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
+      <div>
+        <label class="block text-sm font-medium text-[var(--color-text)] mb-1.5">Name</label>
+        <input id="proj-name" type="text" placeholder="Projektname..." class="w-full px-4 py-2.5 bg-[var(--color-bg-secondary)] border border-[var(--color-border)] rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-[var(--color-accent)]/30" />
       </div>
-    ))}
+      <div>
+        <label class="block text-sm font-medium text-[var(--color-text)] mb-1.5">Beschreibung</label>
+        <input id="proj-desc" type="text" placeholder="Kurzbeschreibung..." class="w-full px-4 py-2.5 bg-[var(--color-bg-secondary)] border border-[var(--color-border)] rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-[var(--color-accent)]/30" />
+      </div>
+    </div>
+    <div class="flex gap-2">
+      <button id="btn-save-project" class="px-4 py-2 bg-[var(--color-accent)] text-white text-sm font-medium rounded-lg hover:bg-[var(--color-accent-hover)] transition-colors">Speichern</button>
+      <button id="btn-cancel-project" class="px-4 py-2 bg-[var(--color-bg-secondary)] text-[var(--color-text-secondary)] text-sm font-medium rounded-lg hover:bg-[var(--color-border)] transition-colors">Abbrechen</button>
+    </div>
+    <p class="text-xs text-[var(--color-text-secondary)] mt-3">
+      Gespeichert als JSON via <code class="bg-[var(--color-bg-secondary)] px-1.5 py-0.5 rounded">Neutralino.filesystem.writeFile()</code>
+    </p>
   </div>
+
+  <!-- File Info -->
+  <div id="file-info" class="hidden mb-6 glass-frosted rounded-2xl p-4 animate-fade-in-up">
+    <div class="flex items-center gap-3">
+      <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="var(--color-accent)" stroke-width="2"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
+      <div class="flex-1">
+        <p class="text-sm font-medium text-[var(--color-text)]">Datei: <code id="file-path" class="bg-[var(--color-bg-secondary)] px-1.5 py-0.5 rounded text-xs">--</code></p>
+        <p class="text-xs text-[var(--color-text-secondary)] mt-0.5">Strukturierte JSON-Daten mit verschachtelten Objekten (Projekte → Tasks → Team)</p>
+      </div>
+      <span id="file-size" class="text-xs text-[var(--color-text-secondary)]">--</span>
+    </div>
+  </div>
+
+  <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6" id="project-grid">
+    <!-- Wird per JS gefüllt -->
+  </div>
+
+  <script is:inline>
+    const COLORS = [
+      'from-blue-500 to-cyan-400', 'from-violet-500 to-purple-400',
+      'from-emerald-500 to-teal-400', 'from-amber-500 to-orange-400',
+      'from-rose-500 to-pink-400', 'from-indigo-500 to-blue-400',
+    ];
+
+    const STATUS_COLORS = {
+      'Aktiv': 'bg-emerald-100 text-emerald-700',
+      'In Arbeit': 'bg-blue-100 text-blue-700',
+      'Review': 'bg-amber-100 text-amber-700',
+      'Planung': 'bg-slate-100 text-slate-600',
+    };
+
+    const DEFAULT_PROJECTS = {
+      version: '1.0',
+      lastModified: new Date().toISOString(),
+      projects: [
+        {
+          id: '1', name: 'Website Redesign', desc: 'Komplette Neugestaltung der Unternehmenswebsite',
+          status: 'Aktiv', progress: 72, deadline: '15. Apr. 2026', color: COLORS[0],
+          team: [
+            { initials: 'MK', name: 'Maria K.', role: 'Design Lead' },
+            { initials: 'TW', name: 'Thomas W.', role: 'Backend' },
+            { initials: 'LB', name: 'Lisa B.', role: 'Frontend' },
+            { initials: 'PH', name: 'Peter H.', role: 'DevOps' },
+          ],
+          tasks: [
+            { title: 'Wireframes erstellen', done: true },
+            { title: 'Design System aufbauen', done: true },
+            { title: 'Frontend implementieren', done: false },
+            { title: 'Testing & QA', done: false },
+          ]
+        },
+        {
+          id: '2', name: 'Mobile App v2', desc: 'Native App mit Flutter für iOS und Android',
+          status: 'In Arbeit', progress: 45, deadline: '30. Mai 2026', color: COLORS[1],
+          team: [
+            { initials: 'SK', name: 'Sarah K.', role: 'Mobile Lead' },
+            { initials: 'MK', name: 'Maria K.', role: 'UI/UX' },
+            { initials: 'TW', name: 'Thomas W.', role: 'API' },
+          ],
+          tasks: [
+            { title: 'App-Architektur planen', done: true },
+            { title: 'Core Features entwickeln', done: false },
+            { title: 'Push Notifications', done: false },
+          ]
+        },
+        {
+          id: '3', name: 'API Integration', desc: 'REST API für Partner-Integrationen',
+          status: 'Review', progress: 89, deadline: '20. Mär. 2026', color: COLORS[2],
+          team: [
+            { initials: 'TW', name: 'Thomas W.', role: 'Backend Lead' },
+            { initials: 'PH', name: 'Peter H.', role: 'DevOps' },
+          ],
+          tasks: [
+            { title: 'Endpunkte definieren', done: true },
+            { title: 'Rate Limiting', done: true },
+            { title: 'Dokumentation', done: false },
+          ]
+        },
+        {
+          id: '4', name: 'Dashboard Analytics', desc: 'Erweiterte Analytics und Reporting Features',
+          status: 'Planung', progress: 15, deadline: '10. Jun. 2026', color: COLORS[3],
+          team: [
+            { initials: 'LB', name: 'Lisa B.', role: 'Frontend' },
+            { initials: 'SK', name: 'Sarah K.', role: 'Data' },
+          ],
+          tasks: [
+            { title: 'Anforderungen sammeln', done: true },
+            { title: 'Chart-Library evaluieren', done: false },
+          ]
+        },
+      ]
+    };
+
+    let projectData = structuredClone(DEFAULT_PROJECTS);
+    let useFilesystem = false;
+    const DATA_FILE = '.storage/projects.json';
+
+    async function getDataPath() {
+      return NL_PATH + '/' + DATA_FILE;
+    }
+
+    async function loadProjects() {
+      if (typeof Neutralino === 'undefined') {
+        renderProjects();
+        return;
+      }
+      try {
+        const path = await getDataPath();
+        const raw = await Neutralino.filesystem.readFile(path);
+        projectData = JSON.parse(raw);
+        useFilesystem = true;
+        updateBadge(path, raw.length);
+      } catch (e) {
+        // Datei existiert noch nicht — Defaults speichern
+        useFilesystem = true;
+        await saveProjects();
+        const path = await getDataPath();
+        updateBadge(path, JSON.stringify(projectData, null, 2).length);
+      }
+      renderProjects();
+    }
+
+    async function saveProjects() {
+      if (!useFilesystem) return;
+      try {
+        projectData.lastModified = new Date().toISOString();
+        const path = await getDataPath();
+        const dir = path.substring(0, path.lastIndexOf('/'));
+        try { await Neutralino.filesystem.createDirectory(dir); } catch (e) { /* exists */ }
+        await Neutralino.filesystem.writeFile(path, JSON.stringify(projectData, null, 2));
+      } catch (e) {
+        console.warn('Filesystem save failed:', e);
+      }
+    }
+
+    function updateBadge(path, size) {
+      const badge = document.getElementById('fs-badge');
+      badge.textContent = 'Neutralino.filesystem';
+      badge.className = badge.className.replace('bg-slate-100 text-slate-600', 'bg-emerald-100 text-emerald-700');
+
+      const info = document.getElementById('file-info');
+      info.classList.remove('hidden');
+      document.getElementById('file-path').textContent = path || DATA_FILE;
+      document.getElementById('file-size').textContent = size ? Math.round(size / 1024 * 10) / 10 + ' KB' : '--';
+    }
+
+    function renderProjects() {
+      const grid = document.getElementById('project-grid');
+      grid.innerHTML = '';
+
+      projectData.projects.forEach((project, i) => {
+        const tasksDone = project.tasks.filter(t => t.done).length;
+        const card = document.createElement('div');
+        card.className = `glass-frosted rounded-2xl overflow-hidden hover-lift animate-fade-in-up stagger-${i + 1}`;
+        card.innerHTML = `
+          <div class="h-2 bg-gradient-to-r ${project.color}"></div>
+          <div class="p-6">
+            <div class="flex items-start justify-between mb-3">
+              <h3 class="font-semibold text-[var(--color-text)]">${project.name}</h3>
+              <span class="inline-flex px-2.5 py-1 rounded-full text-xs font-medium ${STATUS_COLORS[project.status] || ''}">${project.status}</span>
+            </div>
+            <p class="text-sm text-[var(--color-text-secondary)] mb-4">${project.desc}</p>
+
+            <div class="mb-4">
+              <div class="flex justify-between text-xs mb-1.5">
+                <span class="text-[var(--color-text-secondary)]">Fortschritt (${tasksDone}/${project.tasks.length} Tasks)</span>
+                <span class="font-medium text-[var(--color-text)]">${project.progress}%</span>
+              </div>
+              <div class="h-2 bg-[var(--color-bg-secondary)] rounded-full overflow-hidden">
+                <div class="h-full rounded-full bg-gradient-to-r ${project.color}" style="width: ${project.progress}%"></div>
+              </div>
+            </div>
+
+            <!-- Team (verschachtelt) -->
+            <div class="mb-3">
+              <p class="text-xs text-[var(--color-text-secondary)] mb-2">Team</p>
+              <div class="flex -space-x-2">
+                ${project.team.slice(0, 4).map(m => `
+                  <div class="w-7 h-7 rounded-full border-2 border-white bg-gradient-to-br from-[var(--color-accent)] to-[var(--color-info)] flex items-center justify-center text-white text-[10px] font-bold" title="${m.name} — ${m.role}">${m.initials}</div>
+                `).join('')}
+                ${project.team.length > 4 ? `<div class="w-7 h-7 rounded-full border-2 border-white bg-[var(--color-bg-secondary)] flex items-center justify-center text-[10px] font-medium text-[var(--color-text-secondary)]">+${project.team.length - 4}</div>` : ''}
+              </div>
+            </div>
+
+            <div class="flex items-center justify-between">
+              <span class="text-xs text-[var(--color-text-secondary)]">${project.deadline}</span>
+              <button class="text-red-400 hover:text-red-600 transition-colors p-1" onclick="deleteProject('${project.id}')">
+                <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 01-2 2H7a2 2 0 01-2-2V6m3 0V4a2 2 0 012-2h4a2 2 0 012 2v2"/></svg>
+              </button>
+            </div>
+          </div>
+        `;
+        grid.appendChild(card);
+      });
+    }
+
+    async function deleteProject(id) {
+      projectData.projects = projectData.projects.filter(p => p.id !== id);
+      await saveProjects();
+      renderProjects();
+    }
+
+    async function addProject(name, desc) {
+      const newProject = {
+        id: Date.now().toString(),
+        name, desc,
+        status: 'Planung', progress: 0,
+        deadline: 'TBD',
+        color: COLORS[projectData.projects.length % COLORS.length],
+        team: [],
+        tasks: [],
+      };
+      projectData.projects.push(newProject);
+      await saveProjects();
+      renderProjects();
+    }
+
+    // UI
+    document.getElementById('btn-add-project').addEventListener('click', () => {
+      document.getElementById('add-project-dialog').classList.toggle('hidden');
+    });
+    document.getElementById('btn-cancel-project').addEventListener('click', () => {
+      document.getElementById('add-project-dialog').classList.add('hidden');
+    });
+    document.getElementById('btn-save-project').addEventListener('click', async () => {
+      const name = document.getElementById('proj-name').value.trim();
+      if (!name) return;
+      const desc = document.getElementById('proj-desc').value.trim();
+      await addProject(name, desc || 'Neues Projekt');
+      document.getElementById('proj-name').value = '';
+      document.getElementById('proj-desc').value = '';
+      document.getElementById('add-project-dialog').classList.add('hidden');
+    });
+
+    // Init
+    if (window.__NL_READY) loadProjects();
+    else window.addEventListener('neutralino-ready', loadProjects);
+    if (typeof Neutralino === 'undefined') loadProjects();
+  </script>
 </DashboardLayout>

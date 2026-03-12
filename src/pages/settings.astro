@@ -1,29 +1,23 @@
 ---
 import DashboardLayout from '../layouts/DashboardLayout.astro';
-
-const settingsSections = [
-  { id: 'general', label: 'Allgemein', active: true },
-  { id: 'notifications', label: 'Benachrichtigungen', active: false },
-  { id: 'security', label: 'Sicherheit', active: false },
-  { id: 'integrations', label: 'Integrationen', active: false },
-];
 ---
 
-<DashboardLayout title="Einstellungen" subtitle="App-Konfiguration">
+<DashboardLayout title="Einstellungen" subtitle="Preferences &mdash; Neutralino.filesystem API">
   <div class="grid grid-cols-1 lg:grid-cols-4 gap-6">
     <!-- Settings Nav -->
     <div class="glass-frosted rounded-2xl p-4 h-fit animate-slide-in-left">
       <nav class="space-y-1">
-        {settingsSections.map((section) => (
-          <button class={`w-full text-left px-4 py-2.5 rounded-lg text-sm font-medium transition-colors ${
-            section.active
-              ? 'bg-[var(--color-accent)]/10 text-[var(--color-accent)]'
-              : 'text-[var(--color-text-secondary)] hover:bg-[var(--color-bg-secondary)]'
-          }`}>
-            {section.label}
-          </button>
-        ))}
+        <button class="w-full text-left px-4 py-2.5 rounded-lg text-sm font-medium bg-[var(--color-accent)]/10 text-[var(--color-accent)]">Allgemein</button>
+        <button class="w-full text-left px-4 py-2.5 rounded-lg text-sm font-medium text-[var(--color-text-secondary)] hover:bg-[var(--color-bg-secondary)]">Benachrichtigungen</button>
+        <button class="w-full text-left px-4 py-2.5 rounded-lg text-sm font-medium text-[var(--color-text-secondary)] hover:bg-[var(--color-bg-secondary)]">Sicherheit</button>
+        <button class="w-full text-left px-4 py-2.5 rounded-lg text-sm font-medium text-[var(--color-text-secondary)] hover:bg-[var(--color-bg-secondary)]">Integrationen</button>
       </nav>
+
+      <!-- Persistence Info -->
+      <div class="mt-4 pt-4 border-t border-[var(--color-border)]">
+        <span id="settings-badge" class="text-xs font-medium px-2.5 py-1 rounded-full bg-slate-100 text-slate-600">Statische Daten</span>
+        <p id="settings-path" class="text-[10px] text-[var(--color-text-secondary)] mt-2 break-all hidden"></p>
+      </div>
     </div>
 
     <!-- Settings Content -->
@@ -35,23 +29,23 @@ const settingsSections = [
           <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
             <div>
               <label class="block text-sm font-medium text-[var(--color-text)] mb-1.5">App-Name</label>
-              <input type="text" value="Dashboard" class="w-full px-4 py-2.5 bg-[var(--color-bg-secondary)] border border-[var(--color-border)] rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-[var(--color-accent)]/30 focus:border-[var(--color-accent)]" />
+              <input id="pref-appName" type="text" value="Dashboard" class="w-full px-4 py-2.5 bg-[var(--color-bg-secondary)] border border-[var(--color-border)] rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-[var(--color-accent)]/30" />
             </div>
             <div>
               <label class="block text-sm font-medium text-[var(--color-text)] mb-1.5">Sprache</label>
-              <select class="w-full px-4 py-2.5 bg-[var(--color-bg-secondary)] border border-[var(--color-border)] rounded-lg text-sm">
-                <option>Deutsch</option>
-                <option>English</option>
-                <option>Français</option>
+              <select id="pref-language" class="w-full px-4 py-2.5 bg-[var(--color-bg-secondary)] border border-[var(--color-border)] rounded-lg text-sm">
+                <option value="de">Deutsch</option>
+                <option value="en">English</option>
+                <option value="fr">Français</option>
               </select>
             </div>
           </div>
           <div>
             <label class="block text-sm font-medium text-[var(--color-text)] mb-1.5">Zeitzone</label>
-            <select class="w-full px-4 py-2.5 bg-[var(--color-bg-secondary)] border border-[var(--color-border)] rounded-lg text-sm">
-              <option>Europe/Berlin (GMT+1)</option>
-              <option>Europe/London (GMT)</option>
-              <option>America/New_York (GMT-5)</option>
+            <select id="pref-timezone" class="w-full px-4 py-2.5 bg-[var(--color-bg-secondary)] border border-[var(--color-border)] rounded-lg text-sm">
+              <option value="Europe/Berlin">Europe/Berlin (GMT+1)</option>
+              <option value="Europe/London">Europe/London (GMT)</option>
+              <option value="America/New_York">America/New_York (GMT-5)</option>
             </select>
           </div>
         </div>
@@ -66,10 +60,10 @@ const settingsSections = [
               <p class="text-sm font-medium text-[var(--color-text)]">Design-Modus</p>
               <p class="text-xs text-[var(--color-text-secondary)] mt-0.5">Wähle zwischen hellem und dunklem Modus</p>
             </div>
-            <div class="flex gap-2">
-              <button class="px-4 py-2 text-xs font-medium rounded-lg bg-[var(--color-accent)] text-white">Hell</button>
-              <button class="px-4 py-2 text-xs font-medium rounded-lg bg-[var(--color-bg-secondary)] text-[var(--color-text-secondary)]">Dunkel</button>
-              <button class="px-4 py-2 text-xs font-medium rounded-lg bg-[var(--color-bg-secondary)] text-[var(--color-text-secondary)]">System</button>
+            <div class="flex gap-2" id="theme-buttons">
+              <button data-theme="light" class="px-4 py-2 text-xs font-medium rounded-lg bg-[var(--color-accent)] text-white">Hell</button>
+              <button data-theme="dark" class="px-4 py-2 text-xs font-medium rounded-lg bg-[var(--color-bg-secondary)] text-[var(--color-text-secondary)]">Dunkel</button>
+              <button data-theme="system" class="px-4 py-2 text-xs font-medium rounded-lg bg-[var(--color-bg-secondary)] text-[var(--color-text-secondary)]">System</button>
             </div>
           </div>
 
@@ -78,7 +72,7 @@ const settingsSections = [
               <p class="text-sm font-medium text-[var(--color-text)]">Kompakte Ansicht</p>
               <p class="text-xs text-[var(--color-text-secondary)] mt-0.5">Reduziert den Abstand zwischen Elementen</p>
             </div>
-            <button class="relative w-11 h-6 bg-[var(--color-bg-secondary)] rounded-full transition-colors" role="switch">
+            <button id="toggle-compact" class="relative w-11 h-6 bg-[var(--color-bg-secondary)] rounded-full transition-colors" role="switch">
               <span class="absolute left-1 top-1 w-4 h-4 bg-white rounded-full shadow transition-transform"></span>
             </button>
           </div>
@@ -88,7 +82,7 @@ const settingsSections = [
               <p class="text-sm font-medium text-[var(--color-text)]">Animationen</p>
               <p class="text-xs text-[var(--color-text-secondary)] mt-0.5">Aktiviert UI-Animationen und Übergänge</p>
             </div>
-            <button class="relative w-11 h-6 bg-[var(--color-accent)] rounded-full transition-colors" role="switch">
+            <button id="toggle-animations" class="relative w-11 h-6 bg-[var(--color-accent)] rounded-full transition-colors" role="switch">
               <span class="absolute left-6 top-1 w-4 h-4 bg-white rounded-full shadow transition-transform"></span>
             </button>
           </div>
@@ -98,31 +92,181 @@ const settingsSections = [
       <!-- Notifications -->
       <div class="glass-frosted rounded-2xl p-6 animate-fade-in-up stagger-3">
         <h2 class="text-lg font-semibold text-[var(--color-text)] mb-6">Benachrichtigungen</h2>
-        <div class="space-y-4">
-          {[
-            { label: 'E-Mail-Benachrichtigungen', desc: 'Erhalte Updates per E-Mail', enabled: true },
-            { label: 'Push-Benachrichtigungen', desc: 'Desktop-Benachrichtigungen anzeigen', enabled: true },
-            { label: 'Wochen-Zusammenfassung', desc: 'Wöchentlicher Aktivitätsbericht', enabled: false },
-            { label: 'Erwähnungen', desc: 'Benachrichtigung bei Erwähnungen in Kommentaren', enabled: true },
-          ].map((item) => (
-            <div class="flex items-center justify-between">
-              <div>
-                <p class="text-sm font-medium text-[var(--color-text)]">{item.label}</p>
-                <p class="text-xs text-[var(--color-text-secondary)] mt-0.5">{item.desc}</p>
-              </div>
-              <button class={`relative w-11 h-6 rounded-full transition-colors ${item.enabled ? 'bg-[var(--color-accent)]' : 'bg-[var(--color-bg-secondary)]'}`} role="switch">
-                <span class={`absolute top-1 w-4 h-4 bg-white rounded-full shadow transition-transform ${item.enabled ? 'left-6' : 'left-1'}`}></span>
-              </button>
-            </div>
-          ))}
+        <div class="space-y-4" id="notification-toggles">
+          <!-- Wird per JS gefüllt -->
         </div>
       </div>
 
       <!-- Save -->
-      <div class="flex justify-end gap-3">
-        <button class="px-6 py-2.5 text-sm font-medium rounded-lg bg-[var(--color-bg-secondary)] text-[var(--color-text-secondary)] hover:bg-[var(--color-border)] transition-colors">Abbrechen</button>
-        <button class="px-6 py-2.5 text-sm font-medium rounded-lg bg-[var(--color-accent)] text-white hover:bg-[var(--color-accent-hover)] transition-colors">Speichern</button>
+      <div class="flex justify-between items-center">
+        <p id="save-status" class="text-xs text-[var(--color-text-secondary)]"></p>
+        <div class="flex gap-3">
+          <button id="btn-reset" class="px-6 py-2.5 text-sm font-medium rounded-lg bg-[var(--color-bg-secondary)] text-[var(--color-text-secondary)] hover:bg-[var(--color-border)] transition-colors">Zurücksetzen</button>
+          <button id="btn-save" class="px-6 py-2.5 text-sm font-medium rounded-lg bg-[var(--color-accent)] text-white hover:bg-[var(--color-accent-hover)] transition-colors">Speichern</button>
+        </div>
       </div>
     </div>
   </div>
+
+  <script is:inline>
+    const DEFAULT_PREFS = {
+      appName: 'Dashboard',
+      language: 'de',
+      timezone: 'Europe/Berlin',
+      theme: 'light',
+      compact: false,
+      animations: true,
+      notifications: {
+        email: true,
+        push: true,
+        weekly: false,
+        mentions: true,
+      }
+    };
+
+    const NOTIF_LABELS = {
+      email: { label: 'E-Mail-Benachrichtigungen', desc: 'Erhalte Updates per E-Mail' },
+      push: { label: 'Push-Benachrichtigungen', desc: 'Desktop-Benachrichtigungen anzeigen' },
+      weekly: { label: 'Wochen-Zusammenfassung', desc: 'Wöchentlicher Aktivitätsbericht' },
+      mentions: { label: 'Erwähnungen', desc: 'Benachrichtigung bei Erwähnungen in Kommentaren' },
+    };
+
+    let prefs = structuredClone(DEFAULT_PREFS);
+    let useFilesystem = false;
+    const PREFS_FILE = '.storage/preferences.json';
+
+    async function getPrefsPath() {
+      return NL_PATH + '/' + PREFS_FILE;
+    }
+
+    async function loadPrefs() {
+      if (typeof Neutralino === 'undefined') {
+        applyPrefs();
+        return;
+      }
+      try {
+        const path = await getPrefsPath();
+        const raw = await Neutralino.filesystem.readFile(path);
+        prefs = JSON.parse(raw);
+        useFilesystem = true;
+        updateBadge(path);
+      } catch (e) {
+        useFilesystem = true;
+        await savePrefs();
+        updateBadge(await getPrefsPath());
+      }
+      applyPrefs();
+    }
+
+    async function savePrefs() {
+      if (!useFilesystem) return;
+      try {
+        const path = await getPrefsPath();
+        const dir = path.substring(0, path.lastIndexOf('/'));
+        try { await Neutralino.filesystem.createDirectory(dir); } catch (e) { /* exists */ }
+        await Neutralino.filesystem.writeFile(path, JSON.stringify(prefs, null, 2));
+        document.getElementById('save-status').textContent = 'Gespeichert um ' + new Date().toLocaleTimeString('de');
+      } catch (e) {
+        console.warn('Prefs save failed:', e);
+      }
+    }
+
+    function updateBadge(path) {
+      const badge = document.getElementById('settings-badge');
+      badge.textContent = 'Neutralino.filesystem';
+      badge.className = badge.className.replace('bg-slate-100 text-slate-600', 'bg-emerald-100 text-emerald-700');
+      const pathEl = document.getElementById('settings-path');
+      pathEl.textContent = path || PREFS_FILE;
+      pathEl.classList.remove('hidden');
+    }
+
+    function applyPrefs() {
+      document.getElementById('pref-appName').value = prefs.appName;
+      document.getElementById('pref-language').value = prefs.language;
+      document.getElementById('pref-timezone').value = prefs.timezone;
+
+      // Theme buttons
+      document.querySelectorAll('#theme-buttons button').forEach(btn => {
+        const isActive = btn.dataset.theme === prefs.theme;
+        btn.className = `px-4 py-2 text-xs font-medium rounded-lg ${isActive ? 'bg-[var(--color-accent)] text-white' : 'bg-[var(--color-bg-secondary)] text-[var(--color-text-secondary)]'}`;
+      });
+
+      // Toggles
+      applyToggle('toggle-compact', prefs.compact);
+      applyToggle('toggle-animations', prefs.animations);
+
+      // Notifications
+      renderNotifications();
+    }
+
+    function applyToggle(id, enabled) {
+      const btn = document.getElementById(id);
+      btn.className = `relative w-11 h-6 rounded-full transition-colors ${enabled ? 'bg-[var(--color-accent)]' : 'bg-[var(--color-bg-secondary)]'}`;
+      btn.querySelector('span').className = `absolute top-1 w-4 h-4 bg-white rounded-full shadow transition-transform ${enabled ? 'left-6' : 'left-1'}`;
+    }
+
+    function renderNotifications() {
+      const container = document.getElementById('notification-toggles');
+      container.innerHTML = '';
+      Object.entries(NOTIF_LABELS).forEach(([key, { label, desc }]) => {
+        const enabled = prefs.notifications[key];
+        const el = document.createElement('div');
+        el.className = 'flex items-center justify-between';
+        el.innerHTML = `
+          <div>
+            <p class="text-sm font-medium text-[var(--color-text)]">${label}</p>
+            <p class="text-xs text-[var(--color-text-secondary)] mt-0.5">${desc}</p>
+          </div>
+          <button class="relative w-11 h-6 rounded-full transition-colors ${enabled ? 'bg-[var(--color-accent)]' : 'bg-[var(--color-bg-secondary)]'}" role="switch" data-notif="${key}">
+            <span class="absolute top-1 w-4 h-4 bg-white rounded-full shadow transition-transform ${enabled ? 'left-6' : 'left-1'}"></span>
+          </button>
+        `;
+        el.querySelector('button').addEventListener('click', () => {
+          prefs.notifications[key] = !prefs.notifications[key];
+          applyPrefs();
+        });
+        container.appendChild(el);
+      });
+    }
+
+    // Event listeners
+    document.querySelectorAll('#theme-buttons button').forEach(btn => {
+      btn.addEventListener('click', () => {
+        prefs.theme = btn.dataset.theme;
+        applyPrefs();
+      });
+    });
+
+    document.getElementById('toggle-compact').addEventListener('click', () => {
+      prefs.compact = !prefs.compact;
+      applyPrefs();
+    });
+
+    document.getElementById('toggle-animations').addEventListener('click', () => {
+      prefs.animations = !prefs.animations;
+      applyPrefs();
+    });
+
+    document.getElementById('btn-save').addEventListener('click', async () => {
+      prefs.appName = document.getElementById('pref-appName').value;
+      prefs.language = document.getElementById('pref-language').value;
+      prefs.timezone = document.getElementById('pref-timezone').value;
+      await savePrefs();
+
+      if (useFilesystem) {
+        await Neutralino.os.showNotification('Einstellungen', 'Preferences wurden gespeichert.').catch(() => {});
+      }
+    });
+
+    document.getElementById('btn-reset').addEventListener('click', async () => {
+      prefs = structuredClone(DEFAULT_PREFS);
+      await savePrefs();
+      applyPrefs();
+    });
+
+    // Init
+    if (window.__NL_READY) loadPrefs();
+    else window.addEventListener('neutralino-ready', loadPrefs);
+    if (typeof Neutralino === 'undefined') loadPrefs();
+  </script>
 </DashboardLayout>

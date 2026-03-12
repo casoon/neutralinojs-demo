@@ -1,47 +1,6 @@
 ---
 import DashboardLayout from '../layouts/DashboardLayout.astro';
 
-const columns = [
-  {
-    title: 'Offen',
-    color: 'bg-slate-400',
-    count: 5,
-    tasks: [
-      { title: 'Login-Seite gestalten', priority: 'Hoch', assignee: 'MK', tags: ['Design'], dueDate: 'Morgen' },
-      { title: 'API Docs schreiben', priority: 'Mittel', assignee: 'TW', tags: ['Docs'], dueDate: '18. Mär.' },
-      { title: 'Unit Tests ergänzen', priority: 'Niedrig', assignee: 'PH', tags: ['Testing'], dueDate: '22. Mär.' },
-    ]
-  },
-  {
-    title: 'In Arbeit',
-    color: 'bg-blue-400',
-    count: 3,
-    tasks: [
-      { title: 'Dashboard Charts', priority: 'Hoch', assignee: 'LB', tags: ['Frontend'], dueDate: 'Heute' },
-      { title: 'Datenbank optimieren', priority: 'Hoch', assignee: 'PH', tags: ['Backend'], dueDate: '16. Mär.' },
-      { title: 'E-Mail Templates', priority: 'Mittel', assignee: 'SK', tags: ['Design'], dueDate: '20. Mär.' },
-    ]
-  },
-  {
-    title: 'Review',
-    color: 'bg-amber-400',
-    count: 2,
-    tasks: [
-      { title: 'Auth Middleware', priority: 'Hoch', assignee: 'TW', tags: ['Security'], dueDate: 'Heute' },
-      { title: 'Responsive Navbar', priority: 'Mittel', assignee: 'MK', tags: ['Frontend'], dueDate: '15. Mär.' },
-    ]
-  },
-  {
-    title: 'Erledigt',
-    color: 'bg-emerald-400',
-    count: 8,
-    tasks: [
-      { title: 'Projektstruktur aufsetzen', priority: 'Hoch', assignee: 'TW', tags: ['Setup'], dueDate: 'Erledigt' },
-      { title: 'CI/CD Pipeline', priority: 'Hoch', assignee: 'PH', tags: ['DevOps'], dueDate: 'Erledigt' },
-    ]
-  },
-];
-
 const priorityColors: Record<string, string> = {
   'Hoch': 'bg-red-100 text-red-700',
   'Mittel': 'bg-amber-100 text-amber-700',
@@ -49,50 +8,215 @@ const priorityColors: Record<string, string> = {
 };
 ---
 
-<DashboardLayout title="Aufgaben" subtitle="Kanban-Board">
+<DashboardLayout title="Aufgaben" subtitle="Kanban-Board &mdash; Neutralino.storage API">
   <div class="flex items-center justify-between mb-6">
-    <div class="flex gap-2">
-      <button class="px-4 py-2 text-sm font-medium rounded-lg bg-[var(--color-accent)] text-white">Board</button>
-      <button class="px-4 py-2 text-sm font-medium rounded-lg text-[var(--color-text-secondary)] hover:bg-[var(--color-bg-secondary)] transition-colors">Liste</button>
+    <div class="flex items-center gap-4">
+      <div class="flex gap-2">
+        <button class="px-4 py-2 text-sm font-medium rounded-lg bg-[var(--color-accent)] text-white">Board</button>
+        <button class="px-4 py-2 text-sm font-medium rounded-lg text-[var(--color-text-secondary)] hover:bg-[var(--color-bg-secondary)] transition-colors">Liste</button>
+      </div>
+      <span id="storage-badge" class="text-xs font-medium px-2.5 py-1 rounded-full bg-slate-100 text-slate-600">Statische Daten</span>
     </div>
-    <button class="flex items-center gap-2 px-4 py-2 bg-[var(--color-accent)] text-white text-sm font-medium rounded-lg hover:bg-[var(--color-accent-hover)] transition-colors">
+    <button id="btn-add-task" class="flex items-center gap-2 px-4 py-2 bg-[var(--color-accent)] text-white text-sm font-medium rounded-lg hover:bg-[var(--color-accent-hover)] transition-colors">
       <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
       Neue Aufgabe
     </button>
   </div>
 
-  <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-    {columns.map((col, colIdx) => (
-      <div class={`animate-fade-in-up stagger-${colIdx + 1}`}>
-        <div class="flex items-center gap-2 mb-4">
-          <div class={`w-2.5 h-2.5 rounded-full ${col.color}`}></div>
-          <h3 class="font-semibold text-sm text-[var(--color-text)]">{col.title}</h3>
-          <span class="ml-auto text-xs font-medium text-[var(--color-text-secondary)] bg-[var(--color-bg-secondary)] px-2 py-0.5 rounded-full">{col.count}</span>
-        </div>
-        <div class="space-y-3">
-          {col.tasks.map((task) => (
-            <div class="glass-frosted rounded-xl p-4 hover-lift cursor-pointer">
-              <h4 class="font-medium text-sm text-[var(--color-text)] mb-2">{task.title}</h4>
-              <div class="flex flex-wrap gap-1.5 mb-3">
-                <span class={`px-2 py-0.5 rounded text-[10px] font-medium ${priorityColors[task.priority]}`}>
-                  {task.priority}
-                </span>
-                {task.tags.map((tag) => (
-                  <span class="px-2 py-0.5 rounded text-[10px] font-medium bg-[var(--color-accent)]/10 text-[var(--color-accent)]">
-                    {tag}
-                  </span>
-                ))}
-              </div>
-              <div class="flex items-center justify-between">
-                <div class="w-6 h-6 rounded-full bg-gradient-to-br from-[var(--color-accent)] to-[var(--color-info)] flex items-center justify-center text-white text-[9px] font-bold">
-                  {task.assignee}
-                </div>
-                <span class="text-[11px] text-[var(--color-text-secondary)]">{task.dueDate}</span>
-              </div>
-            </div>
-          ))}
-        </div>
+  <!-- Add Task Dialog -->
+  <div id="add-task-dialog" class="hidden mb-6 glass-frosted rounded-2xl p-6 animate-fade-in-up">
+    <h3 class="font-semibold text-[var(--color-text)] mb-4">Neue Aufgabe erstellen</h3>
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-4">
+      <div>
+        <label class="block text-sm font-medium text-[var(--color-text)] mb-1.5">Titel</label>
+        <input id="task-title" type="text" placeholder="Aufgabe eingeben..." class="w-full px-4 py-2.5 bg-[var(--color-bg-secondary)] border border-[var(--color-border)] rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-[var(--color-accent)]/30" />
       </div>
-    ))}
+      <div>
+        <label class="block text-sm font-medium text-[var(--color-text)] mb-1.5">Priorität</label>
+        <select id="task-priority" class="w-full px-4 py-2.5 bg-[var(--color-bg-secondary)] border border-[var(--color-border)] rounded-lg text-sm">
+          <option value="Mittel">Mittel</option>
+          <option value="Hoch">Hoch</option>
+          <option value="Niedrig">Niedrig</option>
+        </select>
+      </div>
+      <div>
+        <label class="block text-sm font-medium text-[var(--color-text)] mb-1.5">Tag</label>
+        <input id="task-tag" type="text" placeholder="z.B. Frontend" class="w-full px-4 py-2.5 bg-[var(--color-bg-secondary)] border border-[var(--color-border)] rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-[var(--color-accent)]/30" />
+      </div>
+    </div>
+    <div class="flex gap-2">
+      <button id="btn-save-task" class="px-4 py-2 bg-[var(--color-accent)] text-white text-sm font-medium rounded-lg hover:bg-[var(--color-accent-hover)] transition-colors">Speichern</button>
+      <button id="btn-cancel-task" class="px-4 py-2 bg-[var(--color-bg-secondary)] text-[var(--color-text-secondary)] text-sm font-medium rounded-lg hover:bg-[var(--color-border)] transition-colors">Abbrechen</button>
+    </div>
+    <p class="text-xs text-[var(--color-text-secondary)] mt-3">
+      Gespeichert via <code class="bg-[var(--color-bg-secondary)] px-1.5 py-0.5 rounded">Neutralino.storage.setData()</code>
+    </p>
   </div>
+
+  <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6" id="kanban-board">
+    <!-- Board wird per JS gefüllt -->
+  </div>
+
+  <script is:inline>
+    const DEFAULT_TASKS = {
+      columns: [
+        {
+          title: 'Offen', color: 'bg-slate-400',
+          tasks: [
+            { id: '1', title: 'Login-Seite gestalten', priority: 'Hoch', assignee: 'MK', tags: ['Design'], dueDate: 'Morgen' },
+            { id: '2', title: 'API Docs schreiben', priority: 'Mittel', assignee: 'TW', tags: ['Docs'], dueDate: '18. Mär.' },
+            { id: '3', title: 'Unit Tests ergänzen', priority: 'Niedrig', assignee: 'PH', tags: ['Testing'], dueDate: '22. Mär.' },
+          ]
+        },
+        {
+          title: 'In Arbeit', color: 'bg-blue-400',
+          tasks: [
+            { id: '4', title: 'Dashboard Charts', priority: 'Hoch', assignee: 'LB', tags: ['Frontend'], dueDate: 'Heute' },
+            { id: '5', title: 'Datenbank optimieren', priority: 'Hoch', assignee: 'PH', tags: ['Backend'], dueDate: '16. Mär.' },
+          ]
+        },
+        {
+          title: 'Review', color: 'bg-amber-400',
+          tasks: [
+            { id: '6', title: 'Auth Middleware', priority: 'Hoch', assignee: 'TW', tags: ['Security'], dueDate: 'Heute' },
+            { id: '7', title: 'Responsive Navbar', priority: 'Mittel', assignee: 'MK', tags: ['Frontend'], dueDate: '15. Mär.' },
+          ]
+        },
+        {
+          title: 'Erledigt', color: 'bg-emerald-400',
+          tasks: [
+            { id: '8', title: 'Projektstruktur aufsetzen', priority: 'Hoch', assignee: 'TW', tags: ['Setup'], dueDate: 'Erledigt' },
+            { id: '9', title: 'CI/CD Pipeline', priority: 'Hoch', assignee: 'PH', tags: ['DevOps'], dueDate: 'Erledigt' },
+          ]
+        },
+      ]
+    };
+
+    const PRIORITY_COLORS = {
+      'Hoch': 'bg-red-100 text-red-700',
+      'Mittel': 'bg-amber-100 text-amber-700',
+      'Niedrig': 'bg-slate-100 text-slate-600',
+    };
+
+    let taskData = structuredClone(DEFAULT_TASKS);
+    let useNeutralino = false;
+
+    async function loadTasks() {
+      if (typeof Neutralino === 'undefined') {
+        renderBoard();
+        return;
+      }
+      try {
+        const raw = await Neutralino.storage.getData('tasks');
+        taskData = JSON.parse(raw);
+        useNeutralino = true;
+        updateBadge();
+      } catch (e) {
+        // Kein gespeicherter Stand — Default verwenden und speichern
+        useNeutralino = true;
+        updateBadge();
+        await saveTasks();
+      }
+      renderBoard();
+    }
+
+    async function saveTasks() {
+      if (!useNeutralino) return;
+      try {
+        await Neutralino.storage.setData('tasks', JSON.stringify(taskData));
+      } catch (e) {
+        console.warn('Storage save failed:', e);
+      }
+    }
+
+    function updateBadge() {
+      const badge = document.getElementById('storage-badge');
+      badge.textContent = 'Neutralino.storage';
+      badge.className = badge.className.replace('bg-slate-100 text-slate-600', 'bg-emerald-100 text-emerald-700');
+    }
+
+    function renderBoard() {
+      const board = document.getElementById('kanban-board');
+      board.innerHTML = '';
+
+      taskData.columns.forEach((col, colIdx) => {
+        const colEl = document.createElement('div');
+        colEl.className = `animate-fade-in-up stagger-${colIdx + 1}`;
+        colEl.innerHTML = `
+          <div class="flex items-center gap-2 mb-4">
+            <div class="w-2.5 h-2.5 rounded-full ${col.color}"></div>
+            <h3 class="font-semibold text-sm text-[var(--color-text)]">${col.title}</h3>
+            <span class="ml-auto text-xs font-medium text-[var(--color-text-secondary)] bg-[var(--color-bg-secondary)] px-2 py-0.5 rounded-full">${col.tasks.length}</span>
+          </div>
+          <div class="space-y-3">
+            ${col.tasks.map(task => `
+              <div class="glass-frosted rounded-xl p-4 hover-lift cursor-pointer group" data-task-id="${task.id}">
+                <div class="flex items-start justify-between mb-2">
+                  <h4 class="font-medium text-sm text-[var(--color-text)]">${task.title}</h4>
+                  <button class="opacity-0 group-hover:opacity-100 text-red-400 hover:text-red-600 transition-all p-1" onclick="deleteTask('${task.id}')">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+                  </button>
+                </div>
+                <div class="flex flex-wrap gap-1.5 mb-3">
+                  <span class="px-2 py-0.5 rounded text-[10px] font-medium ${PRIORITY_COLORS[task.priority] || ''}">${task.priority}</span>
+                  ${task.tags.map(tag => `<span class="px-2 py-0.5 rounded text-[10px] font-medium bg-[var(--color-accent)]/10 text-[var(--color-accent)]">${tag}</span>`).join('')}
+                </div>
+                <div class="flex items-center justify-between">
+                  <div class="w-6 h-6 rounded-full bg-gradient-to-br from-[var(--color-accent)] to-[var(--color-info)] flex items-center justify-center text-white text-[9px] font-bold">${task.assignee}</div>
+                  <span class="text-[11px] text-[var(--color-text-secondary)]">${task.dueDate}</span>
+                </div>
+              </div>
+            `).join('')}
+          </div>
+        `;
+        board.appendChild(colEl);
+      });
+    }
+
+    async function deleteTask(id) {
+      for (const col of taskData.columns) {
+        col.tasks = col.tasks.filter(t => t.id !== id);
+      }
+      await saveTasks();
+      renderBoard();
+    }
+
+    async function addTask(title, priority, tag) {
+      const newTask = {
+        id: Date.now().toString(),
+        title,
+        priority,
+        assignee: '??',
+        tags: tag ? [tag] : [],
+        dueDate: 'Offen',
+      };
+      taskData.columns[0].tasks.push(newTask);
+      await saveTasks();
+      renderBoard();
+    }
+
+    // UI handlers
+    document.getElementById('btn-add-task').addEventListener('click', () => {
+      document.getElementById('add-task-dialog').classList.toggle('hidden');
+    });
+    document.getElementById('btn-cancel-task').addEventListener('click', () => {
+      document.getElementById('add-task-dialog').classList.add('hidden');
+    });
+    document.getElementById('btn-save-task').addEventListener('click', async () => {
+      const title = document.getElementById('task-title').value.trim();
+      if (!title) return;
+      const priority = document.getElementById('task-priority').value;
+      const tag = document.getElementById('task-tag').value.trim();
+      await addTask(title, priority, tag);
+      document.getElementById('task-title').value = '';
+      document.getElementById('task-tag').value = '';
+      document.getElementById('add-task-dialog').classList.add('hidden');
+    });
+
+    // Init
+    if (window.__NL_READY) loadTasks();
+    else window.addEventListener('neutralino-ready', loadTasks);
+    // Fallback: auch ohne Neutralino rendern
+    if (typeof Neutralino === 'undefined') loadTasks();
+  </script>
 </DashboardLayout>
