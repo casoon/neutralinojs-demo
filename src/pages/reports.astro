@@ -1,0 +1,100 @@
+---
+import DashboardLayout from '../layouts/DashboardLayout.astro';
+
+const reports = [
+  { title: 'Monatsbericht Februar', type: 'Finanzen', date: '01. Mär. 2026', size: '2.4 MB', icon: 'pdf', color: 'text-red-500' },
+  { title: 'Sprint Report #12', type: 'Engineering', date: '28. Feb. 2026', size: '1.1 MB', icon: 'doc', color: 'text-blue-500' },
+  { title: 'User Research Q1', type: 'Design', date: '25. Feb. 2026', size: '5.8 MB', icon: 'ppt', color: 'text-orange-500' },
+  { title: 'Performance Audit', type: 'Engineering', date: '20. Feb. 2026', size: '890 KB', icon: 'pdf', color: 'text-red-500' },
+  { title: 'Kundenzufriedenheit', type: 'Produkt', date: '15. Feb. 2026', size: '3.2 MB', icon: 'xlsx', color: 'text-green-500' },
+  { title: 'Sicherheitsbericht', type: 'Security', date: '10. Feb. 2026', size: '1.5 MB', icon: 'pdf', color: 'text-red-500' },
+];
+
+const metrics = [
+  { label: 'Berichte diesen Monat', value: '12', trend: '+3' },
+  { label: 'Letzte Generierung', value: 'Vor 2 Std.', trend: '' },
+  { label: 'Geplante Berichte', value: '4', trend: '' },
+  { label: 'Durchschn. Größe', value: '2.3 MB', trend: '-0.5 MB' },
+];
+---
+
+<DashboardLayout title="Berichte" subtitle="Analyse und Reporting">
+  <!-- Quick Metrics -->
+  <div class="grid grid-cols-1 md:grid-cols-4 gap-4 mb-6">
+    {metrics.map((m, i) => (
+      <div class={`glass-frosted rounded-xl p-4 animate-fade-in-up stagger-${i + 1}`}>
+        <p class="text-xs font-medium text-[var(--color-text-secondary)] uppercase tracking-wider">{m.label}</p>
+        <div class="flex items-baseline gap-2 mt-1">
+          <p class="text-2xl font-bold text-[var(--color-text)]">{m.value}</p>
+          {m.trend && <span class="text-xs text-[var(--color-success)] font-medium">{m.trend}</span>}
+        </div>
+      </div>
+    ))}
+  </div>
+
+  <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+    <!-- Report List -->
+    <div class="lg:col-span-2 glass-frosted rounded-2xl p-6 animate-fade-in-up stagger-5">
+      <div class="flex items-center justify-between mb-6">
+        <h2 class="text-lg font-semibold text-[var(--color-text)]">Aktuelle Berichte</h2>
+        <button class="flex items-center gap-2 px-4 py-2 bg-[var(--color-accent)] text-white text-sm font-medium rounded-lg hover:bg-[var(--color-accent-hover)] transition-colors">
+          <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+          Neuer Bericht
+        </button>
+      </div>
+      <div class="space-y-3">
+        {reports.map((report) => (
+          <div class="flex items-center gap-4 p-4 rounded-xl hover:bg-[var(--color-bg-secondary)]/50 transition-colors cursor-pointer group">
+            <div class={`w-10 h-10 rounded-lg bg-[var(--color-bg-secondary)] flex items-center justify-center ${report.color} text-xs font-bold uppercase`}>
+              {report.icon}
+            </div>
+            <div class="flex-1 min-w-0">
+              <p class="font-medium text-sm text-[var(--color-text)]">{report.title}</p>
+              <p class="text-xs text-[var(--color-text-secondary)] mt-0.5">{report.type} &middot; {report.date}</p>
+            </div>
+            <span class="text-xs text-[var(--color-text-secondary)]">{report.size}</span>
+            <button class="opacity-0 group-hover:opacity-100 p-2 rounded-lg hover:bg-[var(--color-bg-secondary)] transition-all">
+              <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+            </button>
+          </div>
+        ))}
+      </div>
+    </div>
+
+    <!-- Generate Report -->
+    <div class="glass-frosted rounded-2xl p-6 animate-fade-in-up stagger-6">
+      <h2 class="text-lg font-semibold text-[var(--color-text)] mb-4">Bericht generieren</h2>
+      <div class="space-y-4">
+        <div>
+          <label class="block text-sm font-medium text-[var(--color-text)] mb-1.5">Berichtstyp</label>
+          <select class="w-full px-3 py-2.5 bg-[var(--color-bg-secondary)] border border-[var(--color-border)] rounded-lg text-sm">
+            <option>Monatsbericht</option>
+            <option>Sprint Report</option>
+            <option>Performance Audit</option>
+            <option>Kundenzufriedenheit</option>
+          </select>
+        </div>
+        <div>
+          <label class="block text-sm font-medium text-[var(--color-text)] mb-1.5">Zeitraum</label>
+          <select class="w-full px-3 py-2.5 bg-[var(--color-bg-secondary)] border border-[var(--color-border)] rounded-lg text-sm">
+            <option>Letzte 7 Tage</option>
+            <option>Letzte 30 Tage</option>
+            <option>Letztes Quartal</option>
+            <option>Benutzerdefiniert</option>
+          </select>
+        </div>
+        <div>
+          <label class="block text-sm font-medium text-[var(--color-text)] mb-1.5">Format</label>
+          <div class="flex gap-2">
+            <button class="flex-1 px-3 py-2 text-xs font-medium rounded-lg bg-[var(--color-accent)] text-white">PDF</button>
+            <button class="flex-1 px-3 py-2 text-xs font-medium rounded-lg bg-[var(--color-bg-secondary)] text-[var(--color-text-secondary)] hover:bg-[var(--color-border)] transition-colors">XLSX</button>
+            <button class="flex-1 px-3 py-2 text-xs font-medium rounded-lg bg-[var(--color-bg-secondary)] text-[var(--color-text-secondary)] hover:bg-[var(--color-border)] transition-colors">CSV</button>
+          </div>
+        </div>
+        <button class="w-full py-2.5 bg-[var(--color-accent)] text-white text-sm font-medium rounded-lg hover:bg-[var(--color-accent-hover)] transition-colors mt-2">
+          Bericht erstellen
+        </button>
+      </div>
+    </div>
+  </div>
+</DashboardLayout>

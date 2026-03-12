@@ -1,0 +1,19 @@
+.hover-lift {
+  --lift-distance: -4px;
+  --lift-shadow: 0 8px 24px oklch(0 0 0 / 0.2);
+  --lift-duration: 0.25s;
+  transition:
+    transform var(--lift-duration) cubic-bezier(0.16, 1, 0.3, 1),
+    box-shadow var(--lift-duration) cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.hover-lift:hover {
+  transform: translateY(var(--lift-distance));
+  box-shadow: var(--lift-shadow);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .hover-lift {
+    transition: none;
+  }
+}

@@ -1,0 +1,44 @@
+{
+  "applicationId": "dev.neutralinojs.dashboard",
+  "version": "1.0.0",
+  "defaultMode": "window",
+  "port": 0,
+  "documentRoot": "/resources/",
+  "url": "/",
+  "enableServer": true,
+  "enableNativeAPI": true,
+  "tokenSecurity": "one-time",
+  "logging": {
+    "enabled": true,
+    "writeToLogFile": true
+  },
+  "nativeAllowList": [
+    "app.*",
+    "os.*",
+    "computer.*",
+    "clipboard.*",
+    "debug.log",
+    "filesystem.*",
+    "storage.*",
+    "window.*"
+  ],
+  "modes": {
+    "window": {
+      "title": "Dashboard",
+      "width": 1280,
+      "height": 800,
+      "minWidth": 800,
+      "minHeight": 600,
+      "center": true,
+      "maximize": false,
+      "enableInspector": true
+    }
+  },
+  "cli": {
+    "binaryName": "dashboard",
+    "resourcesPath": "/resources/",
+    "clientLibrary": "/resources/neutralino.js",
+    "binaryVersion": "5.5.0",
+    "clientVersion": "5.5.0"
+  }
+}

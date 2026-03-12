@@ -1,0 +1,21 @@
+{
+  "name": "neutralinojs-dashboard-demo",
+  "type": "module",
+  "version": "1.0.0",
+  "private": true,
+  "scripts": {
+    "dev": "astro dev",
+    "build": "astro build",
+    "preview": "astro preview",
+    "neu:dev": "neu run",
+    "neu:build": "astro build && cp -r dist/* resources/ && neu build"
+  },
+  "dependencies": {
+    "astro": "^5.7.0",
+    "tailwindcss": "^4.1.0",
+    "@tailwindcss/vite": "^4.1.0"
+  },
+  "devDependencies": {
+    "@neutralinojs/neu": "^11.7.0"
+  }
+}

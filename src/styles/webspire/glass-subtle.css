@@ -1,0 +1,22 @@
+.glass-subtle {
+  --glass-blur: 8px;
+  --glass-opacity: 0.06;
+
+  background: rgb(255 255 255 / var(--glass-opacity));
+  backdrop-filter: blur(var(--glass-blur));
+  -webkit-backdrop-filter: blur(var(--glass-blur));
+  border: 1px solid rgb(255 255 255 / 0.08);
+}
+
+@media (prefers-color-scheme: dark) {
+  .glass-subtle {
+    background: rgb(0 0 0 / 0.08);
+    border-color: rgb(255 255 255 / 0.05);
+  }
+}
+
+@supports not (backdrop-filter: blur(1px)) {
+  .glass-subtle {
+    background: rgb(245 245 245 / 0.9);
+  }
+}

@@ -1,0 +1,176 @@
+---
+import DashboardLayout from '../layouts/DashboardLayout.astro';
+import StatCard from '../components/StatCard.astro';
+---
+
+<DashboardLayout title="Dashboard" subtitle="Willkommen zurück, Jan">
+  <!-- Stats Grid -->
+  <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+    <div class="animate-fade-in-up stagger-1">
+      <StatCard
+        label="Umsatz"
+        value="€48.560"
+        change="+12.5% zum Vormonat"
+        changeType="positive"
+        icon={`<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="var(--color-accent)" stroke-width="1.5"><path d="M12 1v22M17 5H9.5a3.5 3.5 0 000 7h5a3.5 3.5 0 010 7H6"/></svg>`}
+      />
+    </div>
+    <div class="animate-fade-in-up stagger-2">
+      <StatCard
+        label="Benutzer"
+        value="2.340"
+        change="+8.2% zum Vormonat"
+        changeType="positive"
+        icon={`<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="var(--color-accent)" stroke-width="1.5"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 00-3-3.87"/><path d="M16 3.13a4 4 0 010 7.75"/></svg>`}
+      />
+    </div>
+    <div class="animate-fade-in-up stagger-3">
+      <StatCard
+        label="Projekte"
+        value="18"
+        change="3 aktiv"
+        changeType="neutral"
+        icon={`<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="var(--color-accent)" stroke-width="1.5"><path d="M2 17l10 5 10-5"/><path d="M2 12l10 5 10-5"/><path d="M12 2L2 7l10 5 10-5L12 2z"/></svg>`}
+      />
+    </div>
+    <div class="animate-fade-in-up stagger-4">
+      <StatCard
+        label="Aufgaben"
+        value="142"
+        change="23 offen"
+        changeType="neutral"
+        icon={`<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="var(--color-accent)" stroke-width="1.5"><path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 01-2 2H5a2 2 0 01-2-2V5a2 2 0 012-2h11"/></svg>`}
+      />
+    </div>
+  </div>
+
+  <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+    <!-- Chart Area -->
+    <div class="lg:col-span-2 glass-frosted rounded-2xl p-6 animate-fade-in-up stagger-5">
+      <div class="flex items-center justify-between mb-6">
+        <h2 class="text-lg font-semibold text-[var(--color-text)]">Umsatz-Verlauf</h2>
+        <div class="flex gap-2">
+          <button class="px-3 py-1.5 text-xs font-medium rounded-lg bg-[var(--color-accent)] text-white">7 Tage</button>
+          <button class="px-3 py-1.5 text-xs font-medium rounded-lg text-[var(--color-text-secondary)] hover:bg-[var(--color-bg-secondary)] transition-colors">30 Tage</button>
+          <button class="px-3 py-1.5 text-xs font-medium rounded-lg text-[var(--color-text-secondary)] hover:bg-[var(--color-bg-secondary)] transition-colors">90 Tage</button>
+        </div>
+      </div>
+      <!-- SVG Chart -->
+      <div class="relative h-64">
+        <svg viewBox="0 0 700 240" class="w-full h-full" preserveAspectRatio="none">
+          <defs>
+            <linearGradient id="chartGradient" x1="0" y1="0" x2="0" y2="1">
+              <stop offset="0%" stop-color="oklch(48% 0.16 220)" stop-opacity="0.3"/>
+              <stop offset="100%" stop-color="oklch(48% 0.16 220)" stop-opacity="0"/>
+            </linearGradient>
+          </defs>
+          <!-- Grid lines -->
+          <line x1="0" y1="60" x2="700" y2="60" stroke="oklch(90% 0 0)" stroke-width="0.5"/>
+          <line x1="0" y1="120" x2="700" y2="120" stroke="oklch(90% 0 0)" stroke-width="0.5"/>
+          <line x1="0" y1="180" x2="700" y2="180" stroke="oklch(90% 0 0)" stroke-width="0.5"/>
+          <!-- Area -->
+          <path d="M0,180 L100,140 L200,160 L300,100 L400,120 L500,60 L600,80 L700,40 L700,240 L0,240Z" fill="url(#chartGradient)"/>
+          <!-- Line -->
+          <path d="M0,180 L100,140 L200,160 L300,100 L400,120 L500,60 L600,80 L700,40" fill="none" stroke="oklch(48% 0.16 220)" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+          <!-- Dots -->
+          <circle cx="0" cy="180" r="4" fill="white" stroke="oklch(48% 0.16 220)" stroke-width="2"/>
+          <circle cx="100" cy="140" r="4" fill="white" stroke="oklch(48% 0.16 220)" stroke-width="2"/>
+          <circle cx="200" cy="160" r="4" fill="white" stroke="oklch(48% 0.16 220)" stroke-width="2"/>
+          <circle cx="300" cy="100" r="4" fill="white" stroke="oklch(48% 0.16 220)" stroke-width="2"/>
+          <circle cx="400" cy="120" r="4" fill="white" stroke="oklch(48% 0.16 220)" stroke-width="2"/>
+          <circle cx="500" cy="60" r="4" fill="white" stroke="oklch(48% 0.16 220)" stroke-width="2"/>
+          <circle cx="600" cy="80" r="4" fill="white" stroke="oklch(48% 0.16 220)" stroke-width="2"/>
+          <circle cx="700" cy="40" r="4" fill="white" stroke="oklch(48% 0.16 220)" stroke-width="2"/>
+        </svg>
+        <!-- Labels -->
+        <div class="absolute bottom-0 left-0 right-0 flex justify-between text-xs text-[var(--color-text-secondary)] pt-2">
+          <span>Mo</span><span>Di</span><span>Mi</span><span>Do</span><span>Fr</span><span>Sa</span><span>So</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Activity Feed -->
+    <div class="glass-frosted rounded-2xl p-6 animate-fade-in-up stagger-6">
+      <h2 class="text-lg font-semibold text-[var(--color-text)] mb-4">Letzte Aktivitäten</h2>
+      <div class="space-y-4">
+        {[
+          { user: 'MK', name: 'Maria K.', action: 'hat Projekt "Redesign" aktualisiert', time: 'Vor 5 Min.', color: 'from-rose-400 to-pink-500' },
+          { user: 'TW', name: 'Thomas W.', action: 'hat 3 Aufgaben abgeschlossen', time: 'Vor 20 Min.', color: 'from-emerald-400 to-teal-500' },
+          { user: 'LB', name: 'Lisa B.', action: 'hat einen Kommentar hinzugefügt', time: 'Vor 1 Std.', color: 'from-violet-400 to-purple-500' },
+          { user: 'PH', name: 'Peter H.', action: 'hat Bericht exportiert', time: 'Vor 2 Std.', color: 'from-amber-400 to-orange-500' },
+          { user: 'SK', name: 'Sarah K.', action: 'ist dem Team beigetreten', time: 'Vor 3 Std.', color: 'from-cyan-400 to-blue-500' },
+        ].map((activity) => (
+          <div class="flex items-start gap-3">
+            <div class={`w-8 h-8 rounded-full bg-gradient-to-br ${activity.color} flex items-center justify-center text-white text-xs font-bold flex-shrink-0`}>
+              {activity.user}
+            </div>
+            <div class="flex-1 min-w-0">
+              <p class="text-sm text-[var(--color-text)]">
+                <span class="font-medium">{activity.name}</span>
+                {' '}{activity.action}
+              </p>
+              <p class="text-xs text-[var(--color-text-secondary)] mt-0.5">{activity.time}</p>
+            </div>
+          </div>
+        ))}
+      </div>
+    </div>
+  </div>
+
+  <!-- Recent Projects -->
+  <div class="mt-6 glass-frosted rounded-2xl p-6 animate-fade-in-up stagger-7">
+    <div class="flex items-center justify-between mb-6">
+      <h2 class="text-lg font-semibold text-[var(--color-text)]">Aktive Projekte</h2>
+      <a href="/projects" class="text-sm text-[var(--color-accent)] hover:text-[var(--color-accent-hover)] font-medium no-underline">Alle anzeigen &rarr;</a>
+    </div>
+    <div class="overflow-x-auto">
+      <table class="w-full">
+        <thead>
+          <tr class="text-left text-xs font-medium text-[var(--color-text-secondary)] uppercase tracking-wider">
+            <th class="pb-3 pr-4">Projekt</th>
+            <th class="pb-3 pr-4">Status</th>
+            <th class="pb-3 pr-4">Team</th>
+            <th class="pb-3 pr-4">Fortschritt</th>
+            <th class="pb-3">Deadline</th>
+          </tr>
+        </thead>
+        <tbody class="divide-y divide-[var(--color-border)]">
+          {[
+            { name: 'Website Redesign', status: 'Aktiv', statusColor: 'bg-emerald-100 text-emerald-700', team: 4, progress: 72, deadline: '15. Apr.' },
+            { name: 'Mobile App v2', status: 'In Arbeit', statusColor: 'bg-blue-100 text-blue-700', team: 6, progress: 45, deadline: '30. Mai' },
+            { name: 'API Integration', status: 'Review', statusColor: 'bg-amber-100 text-amber-700', team: 3, progress: 89, deadline: '20. Mär.' },
+          ].map((project) => (
+            <tr class="hover:bg-[var(--color-bg-secondary)]/50 transition-colors">
+              <td class="py-4 pr-4">
+                <p class="font-medium text-sm text-[var(--color-text)]">{project.name}</p>
+              </td>
+              <td class="py-4 pr-4">
+                <span class={`inline-flex px-2.5 py-1 rounded-full text-xs font-medium ${project.statusColor}`}>
+                  {project.status}
+                </span>
+              </td>
+              <td class="py-4 pr-4">
+                <div class="flex -space-x-2">
+                  {Array.from({ length: project.team }).map((_, i) => (
+                    <div class="w-7 h-7 rounded-full border-2 border-white bg-gradient-to-br from-[var(--color-accent)] to-[var(--color-info)] flex items-center justify-center text-white text-[10px] font-bold">
+                      {String.fromCharCode(65 + i)}
+                    </div>
+                  ))}
+                </div>
+              </td>
+              <td class="py-4 pr-4">
+                <div class="flex items-center gap-3">
+                  <div class="flex-1 h-2 bg-[var(--color-bg-secondary)] rounded-full overflow-hidden">
+                    <div class="h-full bg-[var(--color-accent)] rounded-full transition-all" style={`width: ${project.progress}%`}></div>
+                  </div>
+                  <span class="text-xs font-medium text-[var(--color-text-secondary)] w-8">{project.progress}%</span>
+                </div>
+              </td>
+              <td class="py-4 text-sm text-[var(--color-text-secondary)]">{project.deadline}</td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
+    </div>
+  </div>
+</DashboardLayout>

@@ -1,0 +1,98 @@
+---
+import DashboardLayout from '../layouts/DashboardLayout.astro';
+
+const columns = [
+  {
+    title: 'Offen',
+    color: 'bg-slate-400',
+    count: 5,
+    tasks: [
+      { title: 'Login-Seite gestalten', priority: 'Hoch', assignee: 'MK', tags: ['Design'], dueDate: 'Morgen' },
+      { title: 'API Docs schreiben', priority: 'Mittel', assignee: 'TW', tags: ['Docs'], dueDate: '18. Mär.' },
+      { title: 'Unit Tests ergänzen', priority: 'Niedrig', assignee: 'PH', tags: ['Testing'], dueDate: '22. Mär.' },
+    ]
+  },
+  {
+    title: 'In Arbeit',
+    color: 'bg-blue-400',
+    count: 3,
+    tasks: [
+      { title: 'Dashboard Charts', priority: 'Hoch', assignee: 'LB', tags: ['Frontend'], dueDate: 'Heute' },
+      { title: 'Datenbank optimieren', priority: 'Hoch', assignee: 'PH', tags: ['Backend'], dueDate: '16. Mär.' },
+      { title: 'E-Mail Templates', priority: 'Mittel', assignee: 'SK', tags: ['Design'], dueDate: '20. Mär.' },
+    ]
+  },
+  {
+    title: 'Review',
+    color: 'bg-amber-400',
+    count: 2,
+    tasks: [
+      { title: 'Auth Middleware', priority: 'Hoch', assignee: 'TW', tags: ['Security'], dueDate: 'Heute' },
+      { title: 'Responsive Navbar', priority: 'Mittel', assignee: 'MK', tags: ['Frontend'], dueDate: '15. Mär.' },
+    ]
+  },
+  {
+    title: 'Erledigt',
+    color: 'bg-emerald-400',
+    count: 8,
+    tasks: [
+      { title: 'Projektstruktur aufsetzen', priority: 'Hoch', assignee: 'TW', tags: ['Setup'], dueDate: 'Erledigt' },
+      { title: 'CI/CD Pipeline', priority: 'Hoch', assignee: 'PH', tags: ['DevOps'], dueDate: 'Erledigt' },
+    ]
+  },
+];
+
+const priorityColors: Record<string, string> = {
+  'Hoch': 'bg-red-100 text-red-700',
+  'Mittel': 'bg-amber-100 text-amber-700',
+  'Niedrig': 'bg-slate-100 text-slate-600',
+};
+---
+
+<DashboardLayout title="Aufgaben" subtitle="Kanban-Board">
+  <div class="flex items-center justify-between mb-6">
+    <div class="flex gap-2">
+      <button class="px-4 py-2 text-sm font-medium rounded-lg bg-[var(--color-accent)] text-white">Board</button>
+      <button class="px-4 py-2 text-sm font-medium rounded-lg text-[var(--color-text-secondary)] hover:bg-[var(--color-bg-secondary)] transition-colors">Liste</button>
+    </div>
+    <button class="flex items-center gap-2 px-4 py-2 bg-[var(--color-accent)] text-white text-sm font-medium rounded-lg hover:bg-[var(--color-accent-hover)] transition-colors">
+      <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+      Neue Aufgabe
+    </button>
+  </div>
+
+  <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+    {columns.map((col, colIdx) => (
+      <div class={`animate-fade-in-up stagger-${colIdx + 1}`}>
+        <div class="flex items-center gap-2 mb-4">
+          <div class={`w-2.5 h-2.5 rounded-full ${col.color}`}></div>
+          <h3 class="font-semibold text-sm text-[var(--color-text)]">{col.title}</h3>
+          <span class="ml-auto text-xs font-medium text-[var(--color-text-secondary)] bg-[var(--color-bg-secondary)] px-2 py-0.5 rounded-full">{col.count}</span>
+        </div>
+        <div class="space-y-3">
+          {col.tasks.map((task) => (
+            <div class="glass-frosted rounded-xl p-4 hover-lift cursor-pointer">
+              <h4 class="font-medium text-sm text-[var(--color-text)] mb-2">{task.title}</h4>
+              <div class="flex flex-wrap gap-1.5 mb-3">
+                <span class={`px-2 py-0.5 rounded text-[10px] font-medium ${priorityColors[task.priority]}`}>
+                  {task.priority}
+                </span>
+                {task.tags.map((tag) => (
+                  <span class="px-2 py-0.5 rounded text-[10px] font-medium bg-[var(--color-accent)]/10 text-[var(--color-accent)]">
+                    {tag}
+                  </span>
+                ))}
+              </div>
+              <div class="flex items-center justify-between">
+                <div class="w-6 h-6 rounded-full bg-gradient-to-br from-[var(--color-accent)] to-[var(--color-info)] flex items-center justify-center text-white text-[9px] font-bold">
+                  {task.assignee}
+                </div>
+                <span class="text-[11px] text-[var(--color-text-secondary)]">{task.dueDate}</span>
+              </div>
+            </div>
+          ))}
+        </div>
+      </div>
+    ))}
+  </div>
+</DashboardLayout>

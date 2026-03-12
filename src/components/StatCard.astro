@@ -1,0 +1,43 @@
+---
+interface Props {
+  label: string;
+  value: string;
+  change?: string;
+  changeType?: 'positive' | 'negative' | 'neutral';
+  icon?: string;
+}
+
+const { label, value, change, changeType = 'neutral', icon } = Astro.props;
+
+const changeColors = {
+  positive: 'text-[var(--color-success)]',
+  negative: 'text-[var(--color-error)]',
+  neutral: 'text-[var(--color-text-secondary)]',
+};
+
+const changeIcons = {
+  positive: '&#8593;',
+  negative: '&#8595;',
+  neutral: '&#8596;',
+};
+---
+
+<div class="glass-frosted rounded-2xl p-6 hover-lift">
+  <div class="flex items-start justify-between">
+    <div>
+      <p class="text-sm font-medium text-[var(--color-text-secondary)]">{label}</p>
+      <p class="text-3xl font-bold text-[var(--color-text)] mt-2 tracking-tight">{value}</p>
+      {change && (
+        <p class={`text-sm font-medium mt-2 flex items-center gap-1 ${changeColors[changeType]}`}>
+          <span set:html={changeIcons[changeType]} />
+          {change}
+        </p>
+      )}
+    </div>
+    {icon && (
+      <div class="w-10 h-10 rounded-xl bg-[var(--color-accent)]/10 flex items-center justify-center">
+        <span set:html={icon} />
+      </div>
+    )}
+  </div>
+</div>

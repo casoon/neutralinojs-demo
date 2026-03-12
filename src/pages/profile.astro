@@ -1,0 +1,93 @@
+---
+import DashboardLayout from '../layouts/DashboardLayout.astro';
+---
+
+<DashboardLayout title="Profil" subtitle="Dein Konto verwalten">
+  <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+    <!-- Profile Card -->
+    <div class="glass-frosted rounded-2xl p-8 text-center animate-scale-in">
+      <div class="w-24 h-24 rounded-full bg-gradient-to-br from-[var(--color-accent)] to-[var(--color-info)] flex items-center justify-center text-white text-2xl font-bold mx-auto mb-4">
+        JS
+      </div>
+      <h2 class="text-xl font-bold text-[var(--color-text)]">Jan Seidel</h2>
+      <p class="text-sm text-[var(--color-accent)] mt-1">Administrator</p>
+      <p class="text-xs text-[var(--color-text-secondary)] mt-1">Engineering</p>
+
+      <div class="flex justify-center gap-8 mt-6 pt-6 border-t border-[var(--color-border)]">
+        <div>
+          <p class="text-2xl font-bold text-[var(--color-text)]">6</p>
+          <p class="text-xs text-[var(--color-text-secondary)]">Projekte</p>
+        </div>
+        <div>
+          <p class="text-2xl font-bold text-[var(--color-text)]">12</p>
+          <p class="text-xs text-[var(--color-text-secondary)]">Aufgaben</p>
+        </div>
+        <div>
+          <p class="text-2xl font-bold text-[var(--color-text)]">89%</p>
+          <p class="text-xs text-[var(--color-text-secondary)]">Erledigt</p>
+        </div>
+      </div>
+
+      <button class="w-full mt-6 py-2.5 bg-[var(--color-accent)] text-white text-sm font-medium rounded-lg hover:bg-[var(--color-accent-hover)] transition-colors">
+        Bild ändern
+      </button>
+    </div>
+
+    <!-- Profile Form -->
+    <div class="lg:col-span-2 space-y-6">
+      <div class="glass-frosted rounded-2xl p-6 animate-fade-in-up stagger-1">
+        <h2 class="text-lg font-semibold text-[var(--color-text)] mb-6">Persönliche Daten</h2>
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+          <div>
+            <label class="block text-sm font-medium text-[var(--color-text)] mb-1.5">Vorname</label>
+            <input type="text" value="Jan" class="w-full px-4 py-2.5 bg-[var(--color-bg-secondary)] border border-[var(--color-border)] rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-[var(--color-accent)]/30 focus:border-[var(--color-accent)]" />
+          </div>
+          <div>
+            <label class="block text-sm font-medium text-[var(--color-text)] mb-1.5">Nachname</label>
+            <input type="text" value="Seidel" class="w-full px-4 py-2.5 bg-[var(--color-bg-secondary)] border border-[var(--color-border)] rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-[var(--color-accent)]/30 focus:border-[var(--color-accent)]" />
+          </div>
+          <div>
+            <label class="block text-sm font-medium text-[var(--color-text)] mb-1.5">E-Mail</label>
+            <input type="email" value="jan@firma.de" class="w-full px-4 py-2.5 bg-[var(--color-bg-secondary)] border border-[var(--color-border)] rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-[var(--color-accent)]/30 focus:border-[var(--color-accent)]" />
+          </div>
+          <div>
+            <label class="block text-sm font-medium text-[var(--color-text)] mb-1.5">Telefon</label>
+            <input type="tel" value="+49 170 1234567" class="w-full px-4 py-2.5 bg-[var(--color-bg-secondary)] border border-[var(--color-border)] rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-[var(--color-accent)]/30 focus:border-[var(--color-accent)]" />
+          </div>
+          <div class="md:col-span-2">
+            <label class="block text-sm font-medium text-[var(--color-text)] mb-1.5">Bio</label>
+            <textarea rows="3" class="w-full px-4 py-2.5 bg-[var(--color-bg-secondary)] border border-[var(--color-border)] rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-[var(--color-accent)]/30 focus:border-[var(--color-accent)] resize-none">Full-Stack Developer mit Fokus auf moderne Web-Technologien. Leidenschaftlich für Clean Code und gute UX.</textarea>
+          </div>
+        </div>
+      </div>
+
+      <!-- Activity -->
+      <div class="glass-frosted rounded-2xl p-6 animate-fade-in-up stagger-2">
+        <h2 class="text-lg font-semibold text-[var(--color-text)] mb-4">Letzte Aktivität</h2>
+        <div class="space-y-4">
+          {[
+            { action: 'Projekt "Website Redesign" aktualisiert', time: 'Vor 30 Min.', icon: '&#9998;' },
+            { action: '3 Aufgaben in "Mobile App" abgeschlossen', time: 'Vor 2 Std.', icon: '&#10003;' },
+            { action: 'Kommentar in "API Integration" hinterlassen', time: 'Vor 4 Std.', icon: '&#128172;' },
+            { action: 'Bericht "Sprint Report #12" exportiert', time: 'Gestern', icon: '&#128196;' },
+            { action: 'Team-Meeting erstellt für 15. März', time: 'Gestern', icon: '&#128197;' },
+          ].map((item) => (
+            <div class="flex items-center gap-3">
+              <span class="w-8 h-8 rounded-lg bg-[var(--color-bg-secondary)] flex items-center justify-center text-sm" set:html={item.icon} />
+              <div class="flex-1">
+                <p class="text-sm text-[var(--color-text)]">{item.action}</p>
+                <p class="text-xs text-[var(--color-text-secondary)] mt-0.5">{item.time}</p>
+              </div>
+            </div>
+          ))}
+        </div>
+      </div>
+
+      <!-- Save -->
+      <div class="flex justify-end gap-3">
+        <button class="px-6 py-2.5 text-sm font-medium rounded-lg bg-[var(--color-bg-secondary)] text-[var(--color-text-secondary)] hover:bg-[var(--color-border)] transition-colors">Abbrechen</button>
+        <button class="px-6 py-2.5 text-sm font-medium rounded-lg bg-[var(--color-accent)] text-white hover:bg-[var(--color-accent-hover)] transition-colors">Speichern</button>
+      </div>
+    </div>
+  </div>
+</DashboardLayout>

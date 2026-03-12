@@ -1,0 +1,76 @@
+---
+import DashboardLayout from '../layouts/DashboardLayout.astro';
+
+const projects = [
+  { name: 'Website Redesign', desc: 'Komplette Neugestaltung der Unternehmenswebsite', status: 'Aktiv', progress: 72, team: ['MK', 'TW', 'LB', 'PH'], deadline: '15. Apr. 2026', color: 'from-blue-500 to-cyan-400' },
+  { name: 'Mobile App v2', desc: 'Native App mit Flutter für iOS und Android', status: 'In Arbeit', progress: 45, team: ['SK', 'MK', 'TW', 'LB', 'PH', 'AH'], deadline: '30. Mai 2026', color: 'from-violet-500 to-purple-400' },
+  { name: 'API Integration', desc: 'REST API für Partner-Integrationen', status: 'Review', progress: 89, team: ['TW', 'PH', 'AH'], deadline: '20. Mär. 2026', color: 'from-emerald-500 to-teal-400' },
+  { name: 'Dashboard Analytics', desc: 'Erweiterte Analytics und Reporting Features', status: 'Planung', progress: 15, team: ['LB', 'SK'], deadline: '10. Jun. 2026', color: 'from-amber-500 to-orange-400' },
+  { name: 'Cloud Migration', desc: 'Migration der Infrastruktur zu AWS', status: 'Aktiv', progress: 60, team: ['PH', 'AH', 'TW'], deadline: '01. Mai 2026', color: 'from-rose-500 to-pink-400' },
+  { name: 'Design System', desc: 'Einheitliches Design System mit Webspire', status: 'Aktiv', progress: 85, team: ['MK', 'LB'], deadline: '25. Mär. 2026', color: 'from-indigo-500 to-blue-400' },
+];
+
+const statusColors: Record<string, string> = {
+  'Aktiv': 'bg-emerald-100 text-emerald-700',
+  'In Arbeit': 'bg-blue-100 text-blue-700',
+  'Review': 'bg-amber-100 text-amber-700',
+  'Planung': 'bg-slate-100 text-slate-600',
+};
+---
+
+<DashboardLayout title="Projekte" subtitle="6 Projekte, 3 aktiv">
+  <div class="flex items-center justify-between mb-6">
+    <div class="flex gap-2">
+      <button class="px-4 py-2 text-sm font-medium rounded-lg bg-[var(--color-accent)] text-white">Alle</button>
+      <button class="px-4 py-2 text-sm font-medium rounded-lg text-[var(--color-text-secondary)] hover:bg-[var(--color-bg-secondary)] transition-colors">Aktiv</button>
+      <button class="px-4 py-2 text-sm font-medium rounded-lg text-[var(--color-text-secondary)] hover:bg-[var(--color-bg-secondary)] transition-colors">Abgeschlossen</button>
+    </div>
+    <button class="flex items-center gap-2 px-4 py-2 bg-[var(--color-accent)] text-white text-sm font-medium rounded-lg hover:bg-[var(--color-accent-hover)] transition-colors">
+      <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+      Neues Projekt
+    </button>
+  </div>
+
+  <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+    {projects.map((project, i) => (
+      <div class={`glass-frosted rounded-2xl overflow-hidden hover-lift animate-fade-in-up stagger-${i + 1}`}>
+        <div class={`h-2 bg-gradient-to-r ${project.color}`}></div>
+        <div class="p-6">
+          <div class="flex items-start justify-between mb-3">
+            <h3 class="font-semibold text-[var(--color-text)]">{project.name}</h3>
+            <span class={`inline-flex px-2.5 py-1 rounded-full text-xs font-medium ${statusColors[project.status]}`}>
+              {project.status}
+            </span>
+          </div>
+          <p class="text-sm text-[var(--color-text-secondary)] mb-4">{project.desc}</p>
+
+          <div class="mb-4">
+            <div class="flex justify-between text-xs mb-1.5">
+              <span class="text-[var(--color-text-secondary)]">Fortschritt</span>
+              <span class="font-medium text-[var(--color-text)]">{project.progress}%</span>
+            </div>
+            <div class="h-2 bg-[var(--color-bg-secondary)] rounded-full overflow-hidden">
+              <div class={`h-full rounded-full bg-gradient-to-r ${project.color}`} style={`width: ${project.progress}%`}></div>
+            </div>
+          </div>
+
+          <div class="flex items-center justify-between">
+            <div class="flex -space-x-2">
+              {project.team.slice(0, 4).map((member) => (
+                <div class="w-7 h-7 rounded-full border-2 border-white bg-gradient-to-br from-[var(--color-accent)] to-[var(--color-info)] flex items-center justify-center text-white text-[10px] font-bold">
+                  {member}
+                </div>
+              ))}
+              {project.team.length > 4 && (
+                <div class="w-7 h-7 rounded-full border-2 border-white bg-[var(--color-bg-secondary)] flex items-center justify-center text-[10px] font-medium text-[var(--color-text-secondary)]">
+                  +{project.team.length - 4}
+                </div>
+              )}
+            </div>
+            <span class="text-xs text-[var(--color-text-secondary)]">{project.deadline}</span>
+          </div>
+        </div>
+      </div>
+    ))}
+  </div>
+</DashboardLayout>

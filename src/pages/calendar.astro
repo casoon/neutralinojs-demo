@@ -1,0 +1,116 @@
+---
+import DashboardLayout from '../layouts/DashboardLayout.astro';
+
+const days = ['Mo', 'Di', 'Mi', 'Do', 'Fr', 'Sa', 'So'];
+const currentMonth = 'März 2026';
+
+// Calendar grid - 5 weeks of March 2026
+const weeks = [
+  [null, null, null, null, null, null, 1],
+  [2, 3, 4, 5, 6, 7, 8],
+  [9, 10, 11, 12, 13, 14, 15],
+  [16, 17, 18, 19, 20, 21, 22],
+  [23, 24, 25, 26, 27, 28, 29],
+  [30, 31, null, null, null, null, null],
+];
+
+const events: Record<number, Array<{ title: string; time: string; color: string }>> = {
+  3: [{ title: 'Sprint Planning', time: '09:00', color: 'bg-blue-400' }],
+  5: [{ title: 'Design Review', time: '14:00', color: 'bg-violet-400' }],
+  10: [{ title: 'Team Standup', time: '10:00', color: 'bg-emerald-400' }],
+  12: [
+    { title: 'Release v2.1', time: '11:00', color: 'bg-rose-400' },
+    { title: 'Kundengespräch', time: '15:00', color: 'bg-amber-400' },
+  ],
+  15: [{ title: 'Deadline: API', time: 'Ganztägig', color: 'bg-red-400' }],
+  18: [{ title: 'Workshop', time: '09:00', color: 'bg-cyan-400' }],
+  20: [{ title: 'Demo Day', time: '16:00', color: 'bg-indigo-400' }],
+  24: [{ title: 'Retrospektive', time: '14:00', color: 'bg-teal-400' }],
+  28: [{ title: 'Sprint Ende', time: 'Ganztägig', color: 'bg-orange-400' }],
+};
+
+const today = 12;
+
+const upcomingEvents = [
+  { title: 'Release v2.1', date: '12. März', time: '11:00 – 12:00', color: 'bg-rose-400' },
+  { title: 'Kundengespräch', date: '12. März', time: '15:00 – 16:00', color: 'bg-amber-400' },
+  { title: 'Deadline: API Integration', date: '15. März', time: 'Ganztägig', color: 'bg-red-400' },
+  { title: 'UX Workshop', date: '18. März', time: '09:00 – 12:00', color: 'bg-cyan-400' },
+  { title: 'Demo Day', date: '20. März', time: '16:00 – 17:30', color: 'bg-indigo-400' },
+];
+---
+
+<DashboardLayout title="Kalender" subtitle={currentMonth}>
+  <div class="grid grid-cols-1 lg:grid-cols-4 gap-6">
+    <!-- Calendar Grid -->
+    <div class="lg:col-span-3 glass-frosted rounded-2xl p-6 animate-fade-in-up">
+      <div class="flex items-center justify-between mb-6">
+        <div class="flex items-center gap-4">
+          <button class="p-2 rounded-lg hover:bg-[var(--color-bg-secondary)] transition-colors">
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="15 18 9 12 15 6"/></svg>
+          </button>
+          <h2 class="text-lg font-semibold text-[var(--color-text)]">{currentMonth}</h2>
+          <button class="p-2 rounded-lg hover:bg-[var(--color-bg-secondary)] transition-colors">
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 18 15 12 9 6"/></svg>
+          </button>
+        </div>
+        <div class="flex gap-2">
+          <button class="px-3 py-1.5 text-xs font-medium rounded-lg bg-[var(--color-accent)] text-white">Monat</button>
+          <button class="px-3 py-1.5 text-xs font-medium rounded-lg text-[var(--color-text-secondary)] hover:bg-[var(--color-bg-secondary)] transition-colors">Woche</button>
+        </div>
+      </div>
+
+      <!-- Day headers -->
+      <div class="grid grid-cols-7 gap-1 mb-2">
+        {days.map((day) => (
+          <div class="text-center text-xs font-medium text-[var(--color-text-secondary)] py-2">{day}</div>
+        ))}
+      </div>
+
+      <!-- Calendar cells -->
+      <div class="grid grid-cols-7 gap-1">
+        {weeks.flat().map((day) => (
+          <div class={`min-h-24 p-2 rounded-lg border transition-colors ${
+            day === today
+              ? 'border-[var(--color-accent)] bg-[var(--color-accent)]/5'
+              : day
+                ? 'border-[var(--color-border)] hover:bg-[var(--color-bg-secondary)]/50'
+                : 'border-transparent'
+          }`}>
+            {day && (
+              <>
+                <span class={`text-sm font-medium ${
+                  day === today ? 'text-[var(--color-accent)]' : 'text-[var(--color-text)]'
+                }`}>{day}</span>
+                <div class="mt-1 space-y-0.5">
+                  {(events[day] || []).map((evt) => (
+                    <div class={`${evt.color} text-white text-[10px] font-medium px-1.5 py-0.5 rounded truncate`}>
+                      {evt.title}
+                    </div>
+                  ))}
+                </div>
+              </>
+            )}
+          </div>
+        ))}
+      </div>
+    </div>
+
+    <!-- Upcoming Events -->
+    <div class="glass-frosted rounded-2xl p-6 animate-fade-in-up stagger-2">
+      <h2 class="text-lg font-semibold text-[var(--color-text)] mb-4">Kommende Termine</h2>
+      <div class="space-y-3">
+        {upcomingEvents.map((evt) => (
+          <div class="flex gap-3 p-3 rounded-xl hover:bg-[var(--color-bg-secondary)]/50 transition-colors cursor-pointer">
+            <div class={`w-1 rounded-full ${evt.color} flex-shrink-0`}></div>
+            <div>
+              <p class="text-sm font-medium text-[var(--color-text)]">{evt.title}</p>
+              <p class="text-xs text-[var(--color-text-secondary)] mt-0.5">{evt.date}</p>
+              <p class="text-xs text-[var(--color-text-secondary)]">{evt.time}</p>
+            </div>
+          </div>
+        ))}
+      </div>
+    </div>
+  </div>
+</DashboardLayout>

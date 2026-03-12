@@ -1,0 +1,34 @@
+.animate-slide-in-left {
+  --anim-duration: 0.5s;
+  animation: slide-in-left var(--anim-duration) var(--ease-spring, cubic-bezier(0.16, 1, 0.3, 1)) both;
+}
+
+.animate-slide-in-right {
+  --anim-duration: 0.5s;
+  animation: slide-in-right var(--anim-duration) var(--ease-spring, cubic-bezier(0.16, 1, 0.3, 1)) both;
+}
+
+.animate-slide-in-bottom {
+  --anim-duration: 0.5s;
+  animation: slide-in-bottom var(--anim-duration) var(--ease-spring, cubic-bezier(0.16, 1, 0.3, 1)) both;
+}
+
+@keyframes slide-in-left {
+  from { opacity: 0; transform: translateX(-2rem); }
+}
+
+@keyframes slide-in-right {
+  from { opacity: 0; transform: translateX(2rem); }
+}
+
+@keyframes slide-in-bottom {
+  from { opacity: 0; transform: translateY(2rem); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .animate-slide-in-left,
+  .animate-slide-in-right,
+  .animate-slide-in-bottom {
+    animation: none;
+  }
+}

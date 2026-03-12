@@ -1,0 +1,128 @@
+---
+import DashboardLayout from '../layouts/DashboardLayout.astro';
+
+const settingsSections = [
+  { id: 'general', label: 'Allgemein', active: true },
+  { id: 'notifications', label: 'Benachrichtigungen', active: false },
+  { id: 'security', label: 'Sicherheit', active: false },
+  { id: 'integrations', label: 'Integrationen', active: false },
+];
+---
+
+<DashboardLayout title="Einstellungen" subtitle="App-Konfiguration">
+  <div class="grid grid-cols-1 lg:grid-cols-4 gap-6">
+    <!-- Settings Nav -->
+    <div class="glass-frosted rounded-2xl p-4 h-fit animate-slide-in-left">
+      <nav class="space-y-1">
+        {settingsSections.map((section) => (
+          <button class={`w-full text-left px-4 py-2.5 rounded-lg text-sm font-medium transition-colors ${
+            section.active
+              ? 'bg-[var(--color-accent)]/10 text-[var(--color-accent)]'
+              : 'text-[var(--color-text-secondary)] hover:bg-[var(--color-bg-secondary)]'
+          }`}>
+            {section.label}
+          </button>
+        ))}
+      </nav>
+    </div>
+
+    <!-- Settings Content -->
+    <div class="lg:col-span-3 space-y-6">
+      <!-- General Settings -->
+      <div class="glass-frosted rounded-2xl p-6 animate-fade-in-up">
+        <h2 class="text-lg font-semibold text-[var(--color-text)] mb-6">Allgemeine Einstellungen</h2>
+        <div class="space-y-6">
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <div>
+              <label class="block text-sm font-medium text-[var(--color-text)] mb-1.5">App-Name</label>
+              <input type="text" value="Dashboard" class="w-full px-4 py-2.5 bg-[var(--color-bg-secondary)] border border-[var(--color-border)] rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-[var(--color-accent)]/30 focus:border-[var(--color-accent)]" />
+            </div>
+            <div>
+              <label class="block text-sm font-medium text-[var(--color-text)] mb-1.5">Sprache</label>
+              <select class="w-full px-4 py-2.5 bg-[var(--color-bg-secondary)] border border-[var(--color-border)] rounded-lg text-sm">
+                <option>Deutsch</option>
+                <option>English</option>
+                <option>Français</option>
+              </select>
+            </div>
+          </div>
+          <div>
+            <label class="block text-sm font-medium text-[var(--color-text)] mb-1.5">Zeitzone</label>
+            <select class="w-full px-4 py-2.5 bg-[var(--color-bg-secondary)] border border-[var(--color-border)] rounded-lg text-sm">
+              <option>Europe/Berlin (GMT+1)</option>
+              <option>Europe/London (GMT)</option>
+              <option>America/New_York (GMT-5)</option>
+            </select>
+          </div>
+        </div>
+      </div>
+
+      <!-- Appearance -->
+      <div class="glass-frosted rounded-2xl p-6 animate-fade-in-up stagger-2">
+        <h2 class="text-lg font-semibold text-[var(--color-text)] mb-6">Darstellung</h2>
+        <div class="space-y-4">
+          <div class="flex items-center justify-between">
+            <div>
+              <p class="text-sm font-medium text-[var(--color-text)]">Design-Modus</p>
+              <p class="text-xs text-[var(--color-text-secondary)] mt-0.5">Wähle zwischen hellem und dunklem Modus</p>
+            </div>
+            <div class="flex gap-2">
+              <button class="px-4 py-2 text-xs font-medium rounded-lg bg-[var(--color-accent)] text-white">Hell</button>
+              <button class="px-4 py-2 text-xs font-medium rounded-lg bg-[var(--color-bg-secondary)] text-[var(--color-text-secondary)]">Dunkel</button>
+              <button class="px-4 py-2 text-xs font-medium rounded-lg bg-[var(--color-bg-secondary)] text-[var(--color-text-secondary)]">System</button>
+            </div>
+          </div>
+
+          <div class="flex items-center justify-between pt-4 border-t border-[var(--color-border)]">
+            <div>
+              <p class="text-sm font-medium text-[var(--color-text)]">Kompakte Ansicht</p>
+              <p class="text-xs text-[var(--color-text-secondary)] mt-0.5">Reduziert den Abstand zwischen Elementen</p>
+            </div>
+            <button class="relative w-11 h-6 bg-[var(--color-bg-secondary)] rounded-full transition-colors" role="switch">
+              <span class="absolute left-1 top-1 w-4 h-4 bg-white rounded-full shadow transition-transform"></span>
+            </button>
+          </div>
+
+          <div class="flex items-center justify-between pt-4 border-t border-[var(--color-border)]">
+            <div>
+              <p class="text-sm font-medium text-[var(--color-text)]">Animationen</p>
+              <p class="text-xs text-[var(--color-text-secondary)] mt-0.5">Aktiviert UI-Animationen und Übergänge</p>
+            </div>
+            <button class="relative w-11 h-6 bg-[var(--color-accent)] rounded-full transition-colors" role="switch">
+              <span class="absolute left-6 top-1 w-4 h-4 bg-white rounded-full shadow transition-transform"></span>
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Notifications -->
+      <div class="glass-frosted rounded-2xl p-6 animate-fade-in-up stagger-3">
+        <h2 class="text-lg font-semibold text-[var(--color-text)] mb-6">Benachrichtigungen</h2>
+        <div class="space-y-4">
+          {[
+            { label: 'E-Mail-Benachrichtigungen', desc: 'Erhalte Updates per E-Mail', enabled: true },
+            { label: 'Push-Benachrichtigungen', desc: 'Desktop-Benachrichtigungen anzeigen', enabled: true },
+            { label: 'Wochen-Zusammenfassung', desc: 'Wöchentlicher Aktivitätsbericht', enabled: false },
+            { label: 'Erwähnungen', desc: 'Benachrichtigung bei Erwähnungen in Kommentaren', enabled: true },
+          ].map((item) => (
+            <div class="flex items-center justify-between">
+              <div>
+                <p class="text-sm font-medium text-[var(--color-text)]">{item.label}</p>
+                <p class="text-xs text-[var(--color-text-secondary)] mt-0.5">{item.desc}</p>
+              </div>
+              <button class={`relative w-11 h-6 rounded-full transition-colors ${item.enabled ? 'bg-[var(--color-accent)]' : 'bg-[var(--color-bg-secondary)]'}`} role="switch">
+                <span class={`absolute top-1 w-4 h-4 bg-white rounded-full shadow transition-transform ${item.enabled ? 'left-6' : 'left-1'}`}></span>
+              </button>
+            </div>
+          ))}
+        </div>
+      </div>
+
+      <!-- Save -->
+      <div class="flex justify-end gap-3">
+        <button class="px-6 py-2.5 text-sm font-medium rounded-lg bg-[var(--color-bg-secondary)] text-[var(--color-text-secondary)] hover:bg-[var(--color-border)] transition-colors">Abbrechen</button>
+        <button class="px-6 py-2.5 text-sm font-medium rounded-lg bg-[var(--color-accent)] text-white hover:bg-[var(--color-accent-hover)] transition-colors">Speichern</button>
+      </div>
+    </div>
+  </div>
+</DashboardLayout>

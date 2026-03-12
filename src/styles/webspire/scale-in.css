@@ -1,0 +1,24 @@
+.animate-scale-in {
+  --anim-duration: 0.5s;
+  animation: scale-in var(--anim-duration) var(--ease-spring, cubic-bezier(0.16, 1, 0.3, 1)) both;
+}
+
+.animate-scale-in-up {
+  --anim-duration: 0.5s;
+  animation: scale-in-up var(--anim-duration) var(--ease-spring, cubic-bezier(0.16, 1, 0.3, 1)) both;
+}
+
+@keyframes scale-in {
+  from { opacity: 0; transform: scale(0.9); }
+}
+
+@keyframes scale-in-up {
+  from { opacity: 0; transform: scale(0.9) translateY(0.5rem); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .animate-scale-in,
+  .animate-scale-in-up {
+    animation: none;
+  }
+}
