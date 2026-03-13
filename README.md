@@ -1,53 +1,53 @@
 # Neutralinojs + Astro Admin Dashboard Demo
 
-Eine Demo-Anwendung, die zeigt, wie man mit **Neutralinojs** und **Astro** ein modernes Admin-Dashboard als native Desktop-App bauen kann.
+A demo application showing how to build a modern admin dashboard as a native desktop app with **Neutralinojs** and **Astro**.
 
-## Was ist das?
+## What is this?
 
-Dieses Projekt kombiniert zwei Technologien:
+This project combines two technologies:
 
-- **[Astro](https://astro.build)** generiert das Frontend als statische Seiten mit schnellem Rendering und komponentenbasierter Architektur.
-- **[Neutralinojs](https://neutralino.js.org)** verpackt das Frontend in eine leichtgewichtige native Desktop-Anwendung — ohne Electron-Overhead.
+- **[Astro](https://astro.build)** generates the frontend as static pages with fast rendering and a component-based architecture.
+- **[Neutralinojs](https://neutralino.js.org)** wraps the frontend into a lightweight native desktop application — without the Electron overhead.
 
-Das Ergebnis ist ein Admin-Dashboard mit mehreren Ansichten, das sowohl im Browser als auch als Desktop-App läuft. Die App zeigt verschiedene Neutralinojs-APIs im Einsatz — von einfachem Key-Value-Storage bis zu strukturierten JSON-Dateien und nativen OS-Dialogen.
+The result is an admin dashboard with multiple views that runs both in the browser and as a desktop app. It showcases various Neutralinojs APIs in action — from simple key-value storage to structured JSON files and native OS dialogs.
 
-## Neutralinojs-Features (nach Seite)
+## Neutralinojs Features (by page)
 
-| Seite | API | Was wird gezeigt |
-|-------|-----|------------------|
-| **Dashboard** | `Neutralino.computer`, `Neutralino.os` | Live System-Info (OS, RAM, Hostname) |
-| **Aufgaben** | `Neutralino.storage` | CRUD mit Key-Value Storage (einfachster Datenzugriff) |
-| **Projekte** | `Neutralino.filesystem` | Strukturierte JSON-Dateien mit verschachtelten Daten (Projekte → Tasks → Team) |
-| **Einstellungen** | `Neutralino.filesystem`, `Neutralino.os` | Preferences als JSON-Datei lesen/schreiben, native Notifications |
-| **Berichte** | `Neutralino.os`, `Neutralino.filesystem`, `Neutralino.clipboard` | Save-Dialog, Datei-Export (JSON/CSV/TXT), Clipboard |
+| Page | API | What it demonstrates |
+|------|-----|----------------------|
+| **Dashboard** | `Neutralino.computer`, `Neutralino.os` | Live system info (OS, RAM, hostname) |
+| **Tasks** | `Neutralino.storage` | CRUD with key-value storage (simplest data access) |
+| **Projects** | `Neutralino.filesystem` | Structured JSON files with nested data (Projects → Tasks → Team) |
+| **Settings** | `Neutralino.filesystem`, `Neutralino.os` | Read/write preferences as JSON file, native notifications |
+| **Reports** | `Neutralino.os`, `Neutralino.filesystem`, `Neutralino.clipboard` | Save dialog, file export (JSON/CSV/TXT), clipboard |
 
-### Datenzugriff: Die Progression
+### Data Access: The Progression
 
-Das Demo zeigt drei Stufen der Datenpersistenz:
+This demo shows three levels of data persistence:
 
-1. **Neutralino.storage** (Tasks) — Einfacher Key-Value Store, ideal für simple Daten
-2. **Neutralino.filesystem mit JSON** (Projekte, Settings) — Strukturierte Dokumente mit verschachtelten Objekten und Relationen
-3. **Hinweis**: Für komplexere Szenarien (Volltextsuche, Relationen, Transaktionen) sollte eine echte Datenbank eingesetzt werden (z.B. SQLite über sql.js + Filesystem-Persistenz oder eine Neutralinojs Extension)
+1. **Neutralino.storage** (Tasks) — Simple key-value store, ideal for basic data
+2. **Neutralino.filesystem with JSON** (Projects, Settings) — Structured documents with nested objects and relations
+3. **Note**: For more complex scenarios (full-text search, relations, transactions), a real database should be used (e.g. SQLite via sql.js + filesystem persistence or a Neutralinojs Extension)
 
-## Tech-Stack
+## Tech Stack
 
 - **Astro 5** — Static Site Generation
 - **Tailwind CSS 4** — Utility-first Styling
-- **Neutralinojs 5** — Native Desktop-Runtime
-- **Webspire** — CSS-Effekte (Glassmorphism, Animationen)
+- **Neutralinojs 5** — Native Desktop Runtime
+- **Webspire** — CSS effects (glassmorphism, animations)
 
-## Projektstruktur
+## Project Structure
 
 ```
 src/
-├── components/        # Wiederverwendbare UI-Komponenten
+├── components/        # Reusable UI components
 │   ├── Header.astro
 │   ├── Sidebar.astro
 │   └── StatCard.astro
 ├── layouts/
 │   └── DashboardLayout.astro
-├── pages/             # Dashboard-Seiten (Astro File-based Routing)
-│   ├── index.astro         # Dashboard-Startseite
+├── pages/             # Dashboard pages (Astro file-based routing)
+│   ├── index.astro         # Dashboard home
 │   ├── analytics.astro
 │   ├── projects.astro
 │   ├── tasks.astro
@@ -58,13 +58,13 @@ src/
 │   ├── settings.astro
 │   └── profile.astro
 └── styles/
-    ├── global.css           # Design-Tokens & Tailwind
-    └── webspire/            # Webspire CSS-Effekte
+    ├── global.css           # Design tokens & Tailwind
+    └── webspire/            # Webspire CSS effects
 ```
 
-## Starten
+## Getting Started
 
-### Voraussetzungen
+### Prerequisites
 
 - Node.js (>= 18)
 - pnpm
@@ -73,32 +73,32 @@ src/
 
 ```bash
 pnpm install
-npx neu update    # Neutralino-Binaries & Client herunterladen
+npx neu update    # Download Neutralino binaries & client
 ```
 
-### Entwicklung (Browser)
+### Development (Browser)
 
 ```bash
 pnpm dev
 ```
 
-Öffnet den Astro Dev-Server — ideal zum Entwickeln und Testen im Browser.
+Opens the Astro dev server — ideal for developing and testing in the browser.
 
-### Entwicklung (Native App)
+### Development (Native App)
 
 ```bash
 pnpm neu:dev
 ```
 
-Startet die Anwendung als native Desktop-App mit Neutralinojs.
+Launches the application as a native desktop app with Neutralinojs.
 
 ### Build
 
 ```bash
-pnpm build        # Astro-Build nach /resources/
-pnpm neu:build    # Native App kompilieren
+pnpm build        # Astro build to /resources/
+pnpm neu:build    # Compile native app
 ```
 
 ## Webspire MCP
 
-Das Projekt enthält eine `.mcp.json`-Konfiguration für den [Webspire](https://webspire.de) MCP-Server. Damit kann Claude Code direkt auf CSS-Snippets und UI-Patterns zugreifen — nützlich bei der Weiterentwicklung des Dashboards.
+This project includes a `.mcp.json` configuration for the [Webspire](https://webspire.de) MCP server. This allows Claude Code to directly access CSS snippets and UI patterns — useful when extending the dashboard.
